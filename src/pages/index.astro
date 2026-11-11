@@ -8,13 +8,19 @@ const data = getHomepageData('zh');
 if (!data) {
   throw new Error('没有可用内容，请先运行 npm run sync 并检查 oddities-and-mysteries');
 }
+
+const pageTitle = data.channelMode
+  ? `${data.siteName} · ${data.siteTagline} · 稀奇奇`
+  : '稀奇奇 · 无奇不有';
 ---
 
 <SiteLayout
-  title="稀奇奇 · 无奇不有"
-  description="收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。中英双语，开源共建。"
+  title={pageTitle}
+  description={data.siteDescription}
   lang="zh"
   langSwitchHref="/en/"
+  randomChannel={data.randomChannel}
+  image={data.heroImage}
 >
   <Hero
     kicker={data.heroKicker}
@@ -23,7 +29,7 @@ if (!data) {
     summary={data.heroSummary}
     image={data.heroImage}
     imageAlt={data.heroTitle}
-    href={data.heroHref}
+    href={data.heroHref || undefined}
     ctaLabel={data.ctaLabel}
     stats={data.stats}
   />
@@ -31,18 +37,22 @@ if (!data) {
   <ImageWall items={data.wallItems} />
 
   <section class="random-full">
-    <img class="random-bg" src="/content/inline/tunguska-aerial.jpg" alt="" />
+    <img class="random-bg" src={data.heroImage} alt="" />
     <div class="random-shade"></div>
     <div class="container random-content">
       <img class="random-rhino" src="/assets/rhino-sticker.svg" alt="稀奇奇小犀牛" />
       <div>
         <p class="kicker">RANDOM / 随便翻</p>
         <h2>不知道看什么？<br>让犀牛替你翻一页。</h2>
-        <p class="random-copy">从已入库的档案里随机抽一条。可能是通古斯，也可能是一颗让王后名誉扫地的钻石。</p>
+        <p class="random-copy">
+          {data.channelMode
+            ? `只从「${data.siteName}」已入库的 ${data.entries.length} 条档案里随机抽一条。翻到哪页算哪页。`
+            : `从 ${data.entries.length} 条已入库的档案里随机抽一条，可能是天外来客，也可能是一颗让王后名誉扫地的钻石。`}
+        </p>
         <button class="btn-primary random-cta" type="button" data-random>随机穿越 ↗</button>
       </div>
     </div>
-    <span class="random-credit">背景插图：稀奇奇编辑部 / CC BY-SA 4.0</span>
+    <span class="random-credit">背景图：条目封面 · 稀奇奇编辑部</span>
   </section>
 </SiteLayout>
 

@@ -7,9 +7,27 @@ interface Props {
   description?: string;
   lang?: 'zh' | 'en';
   theme?: 'light' | 'dark';
+  siteName?: string;
+  image?: string;
+  alternateHref?: string;
 }
 
-const { title, description = '', lang = 'zh', theme = 'dark' } = Astro.props;
+const {
+  title,
+  description = '',
+  lang = 'zh',
+  theme = 'dark',
+  siteName = '稀奇奇',
+  image,
+  alternateHref,
+} = Astro.props;
+
+const base = Astro.site || Astro.url;
+const canonical = new URL(Astro.url.pathname, base).href;
+const alternate = alternateHref ? new URL(alternateHref, base).href : null;
+const ogImage = image ? new URL(image, base).href : null;
+const alternateLang = lang === 'zh' ? 'en' : 'zh-CN';
+const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
 ---
 
 <!DOCTYPE html>
@@ -19,6 +37,21 @@ const { title, description = '', lang = 'zh', theme = 'dark' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    {alternate && <link rel="alternate" hreflang={alternateLang} href={alternate} />}
+    <link rel="alternate" hreflang={selfLang} href={canonical} />
+    <link rel="icon" href="/assets/rhino.svg" type="image/svg+xml" />
+    <meta name="theme-color" content={theme === 'dark' ? '#12100E' : '#F3EEE4'} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
     <script is:inline>
       (function () {
         try {

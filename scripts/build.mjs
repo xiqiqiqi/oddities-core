@@ -1,19 +1,182 @@
 #!/usr/bin/env node
+import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const configPath = process.env.SITE_CONFIG || process.argv[2];
+const here = path.dirname(fileURLToPath(import.meta.url));
+const coreRoot = path.resolve(here, '..');
 
-if (!configPath) {
-  console.error('Usage: SITE_CONFIG=../mysteries/site.config.ts node scripts/build.mjs');
+function parseArgs(argv) {
+  const args = {};
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index];
+
+    if (token === '--dev') {
+      args.dev = true;
+      continue;
+    }
+
+    if (token.startsWith('--')) {
+      args[token.slice(2)] = argv[index + 1];
+      index += 1;
+    }
+  }
+
+  return args;
+}
+
+async function loadSiteConfig(file) {
+  try {
+    const module = await import(`${pathToFileURL(file).href}?t=${Date.now()}`);
+    return module.default;
+  } catch (error) {
+    // 兼容未开启 TypeScript 类型剥离的 Node：site.config.ts 只用到 `as const`。
+    const source = fs.readFileSync(file, 'utf8');
+    const code = source
+      .replace(/\bas\s+const\b/g, '')
+      .replace(/export\s+default\s+/, 'module.exports = ');
+    const module = { exports: {} };
+    new Function('module', 'exports', code)(module, module.exports);
+    return module.exports;
+  }
+}
+
+function walkHtml(dir, files = []) {
+  for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, item.name);
+    if (item.isDirectory()) {
+      walkHtml(full, files);
+    } else if (item.name.endsWith('.html')) {
+      files.push(full);
+    }
+  }
+
+  return files;
+}
+
+function writeSitemap(outDir, siteUrl) {
+  const pages = walkHtml(outDir)
+    .map((file) => path.relative(outDir, file).split(path.sep).join('/'))
+    .filter((relative) => relative !== '404.html')
+    .map((relative) => '/' + relative.replace(/index\.html$/, ''))
+    .sort();
+
+  const today = new Date().toISOString().slice(0, 10);
+  const body = pages
+    .map((page) => `  <url><loc>${siteUrl}${page}</loc><lastmod>${today}</lastmod></url>`)
+    .join('\n');
+
+  fs.writeFileSync(
+    path.join(outDir, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
+  );
+
+  return pages.length;
+}
+
+function writeRobots(outDir, siteUrl) {
+  fs.writeFileSync(
+    path.join(outDir, 'robots.txt'),
+    `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`
+  );
+}
+
+const args = parseArgs(process.argv.slice(2));
+const configPath = path.resolve(
+  process.cwd(),
+  args.config || process.env.SITE_CONFIG || 'site.config.ts'
+);
+const siteRoot = path.dirname(configPath);
+const outDir = path.resolve(process.cwd(), args.out || path.join(siteRoot, 'dist'));
+const contentRoot = path.resolve(
+  args.content ||
+    process.env.XIQIQI_CONTENT_ROOT ||
+    path.join(coreRoot, '..', 'oddities-and-mysteries')
+);
+
+if (!fs.existsSync(configPath)) {
+  console.error(`[build] site config not found: ${configPath}`);
   process.exit(1);
 }
 
-const resolved = path.resolve(process.cwd(), configPath);
+if (!fs.existsSync(path.join(contentRoot, 'entries'))) {
+  console.error(`[build] content repo not found: ${contentRoot}`);
+  process.exit(1);
+}
 
-console.log(`[build] site config: ${resolved}`);
-console.log('[build] TODO M1:');
-console.log('  1. load site.config.ts (channel, domain, accent, locales)');
-console.log('  2. load entries from ../oddities-and-mysteries');
-console.log('  3. filter by channel, render Astro pages');
-console.log('  4. run Pagefind for channel sites');
-console.log('  5. write dist/CNAME and sitemap/RSS');
+const config = await loadSiteConfig(configPath);
+
+if (!config || !config.channel || !config.domain) {
+  console.error('[build] site config must define channel and domain');
+  process.exit(1);
+}
+
+const mode = config.channel === 'portal' ? 'portal' : 'channel';
+const siteUrl = `https://${config.domain}`;
+const env = {
+  ...process.env,
+  XIQIQI_SITE_MODE: mode,
+  XIQIQI_SITE_CHANNEL: String(config.channel),
+  XIQIQI_SITE_NAME: String(config.name || ''),
+  XIQIQI_SITE_TAGLINE: String(config.tagline || ''),
+  XIQIQI_SITE_DOMAIN: String(config.domain),
+  XIQIQI_SITE_ACCENT: String(config.accent || '#D99A2B'),
+  XIQIQI_SITE_URL: siteUrl,
+  XIQIQI_CONTENT_ROOT: contentRoot,
+};
+
+console.log(`[build] site      ${config.name} (${mode}, channel=${config.channel})`);
+console.log(`[build] domain    ${siteUrl}`);
+console.log(`[build] content   ${contentRoot}`);
+console.log(`[build] output    ${outDir}`);
+
+function run(command, commandArgs) {
+  const result = spawnSync(command, commandArgs, { cwd: coreRoot, env, stdio: 'inherit' });
+
+  if (result.status !== 0) {
+    process.exit(result.status || 1);
+  }
+}
+
+run(process.execPath, [path.join(coreRoot, 'scripts', 'sync-assets.mjs')]);
+
+const astroBin = path.join(coreRoot, 'node_modules', 'astro', 'astro.js');
+
+if (!fs.existsSync(astroBin)) {
+  console.error('[build] astro is not installed. Run npm install in oddities-core first.');
+  process.exit(1);
+}
+
+if (args.dev) {
+  run(process.execPath, [astroBin, 'dev']);
+  process.exit(0);
+}
+
+run(process.execPath, [astroBin, 'build']);
+
+const builtDir = path.join(coreRoot, 'dist');
+
+if (!fs.existsSync(builtDir)) {
+  console.error(`[build] build output missing: ${builtDir}`);
+  process.exit(1);
+}
+
+fs.rmSync(outDir, { recursive: true, force: true });
+fs.mkdirSync(outDir, { recursive: true });
+fs.cpSync(builtDir, outDir, { recursive: true });
+
+const cnamePath = path.join(siteRoot, 'CNAME');
+
+if (fs.existsSync(cnamePath)) {
+  const cname = fs.readFileSync(cnamePath, 'utf8').trim();
+  if (cname) fs.writeFileSync(path.join(outDir, 'CNAME'), `${cname}\n`);
+}
+
+fs.writeFileSync(path.join(outDir, '.nojekyll'), '');
+
+const pageCount = writeSitemap(outDir, siteUrl);
+writeRobots(outDir, siteUrl);
+
+console.log(`[build] done      ${pageCount} pages -> ${outDir}`);

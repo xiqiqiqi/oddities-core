@@ -2,7 +2,7 @@
 import Rhino from './Rhino.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
-import { getChannels } from '../lib/content';
+import { getChannelHref, getChannels } from '../lib/content';
 
 interface Props {
   siteName?: string;
@@ -19,7 +19,6 @@ const {
 } = Astro.props;
 
 const channels = getChannels();
-const prefix = lang === 'en' ? '/en' : '';
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
 const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
@@ -39,7 +38,7 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
 
     <nav class="main-nav" aria-label={lang === 'zh' ? '频道导航' : 'Channel navigation'}>
       {channels.map((channel) => (
-        <a href={`${prefix}/${channel.route}/`}>
+        <a href={getChannelHref(channel, lang)}>
           {lang === 'zh' ? channel.zh : channel.en}
         </a>
       ))}
@@ -73,7 +72,7 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
 
   <nav class="mobile-nav container" data-mobile-nav aria-label={lang === 'zh' ? '移动端导航' : 'Mobile navigation'}>
     {channels.map((channel) => (
-      <a href={`${prefix}/${channel.route}/`}>
+      <a href={getChannelHref(channel, lang)}>
         {lang === 'zh' ? channel.zh : channel.en}
       </a>
     ))}

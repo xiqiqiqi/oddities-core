@@ -3,7 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
 import SearchOverlay from '../components/SearchOverlay.astro';
-import { getEntries } from '../lib/content';
+import { getEntries, getSiteInfo } from '../lib/content';
 
 interface Props {
   title: string;
@@ -14,6 +14,7 @@ interface Props {
   tagline?: string;
   langSwitchHref: string;
   randomChannel?: string;
+  image?: string;
 }
 
 const {
@@ -21,11 +22,16 @@ const {
   description,
   lang = 'zh',
   theme = 'dark',
-  siteName = '稀奇奇',
-  tagline = '无奇不有',
+  siteName,
+  tagline,
   langSwitchHref,
   randomChannel,
+  image,
 } = Astro.props;
+
+const site = getSiteInfo(lang);
+const resolvedName = siteName || site.name;
+const resolvedTagline = tagline || site.tagline;
 
 const entries = getEntries();
 const searchEntries = entries.map((entry) => ({
@@ -49,17 +55,25 @@ const randomEntries = randomChannel
   : searchEntries;
 ---
 
-<BaseLayout title={title} description={description} lang={lang} theme={theme}>
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  theme={theme}
+  siteName={resolvedName}
+  image={image}
+  alternateHref={langSwitchHref}
+>
   <Masthead
-    siteName={siteName}
-    tagline={tagline}
+    siteName={resolvedName}
+    tagline={resolvedTagline}
     lang={lang}
     langSwitchHref={langSwitchHref}
   />
   <main>
     <slot />
   </main>
-  <Footer lang={lang} />
+  <Footer lang={lang} siteName={resolvedName} siteTagline={resolvedTagline} />
   <SearchOverlay entries={searchEntries} lang={lang} />
 
   <div hidden>

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import { marked } from 'marked';
+import { getSiteChannel, getSiteMode, siteOrigin } from './site';
 
 export type Lang = 'zh' | 'en';
 
@@ -24,11 +25,13 @@ export interface ChannelMeta {
   annotationEn: string;
   descriptionZh: string;
   descriptionEn: string;
+  domain: string;
 }
 
 export interface Entry {
   channel: string;
   channelRoute: string;
+  channelDomain: string;
   channelZh: string;
   channelEn: string;
   annotationZh: string;
@@ -63,7 +66,9 @@ export interface Entry {
 }
 
 const coreRoot = process.cwd();
-const contentRoot = path.resolve(coreRoot, '..', 'oddities-and-mysteries');
+const contentRoot = process.env.XIQIQI_CONTENT_ROOT
+  ? path.resolve(process.env.XIQIQI_CONTENT_ROOT)
+  : path.resolve(coreRoot, '..', 'oddities-and-mysteries');
 const entriesRoot = path.join(contentRoot, 'entries');
 const taxonomyRoot = path.join(contentRoot, 'taxonomy');
 
@@ -109,6 +114,7 @@ function loadChannels(): ChannelMeta[] {
       annotationEn: channel.annotation_en,
       descriptionZh: channel.description_zh,
       descriptionEn: channel.description_en,
+      domain: channel.domain,
     }));
 }
 
@@ -123,7 +129,22 @@ export function getChannelByRoute(route: string): ChannelMeta | undefined {
   return channels.find((channel) => channel.route === route);
 }
 
-export function getEntries(): Entry[] {
+function pathFor(channelId: string, channelDomain: string, slug: string, lang: Lang): string {
+  const prefix = lang === 'en' ? '/en' : '';
+  const pathname = `${prefix}/${slug}/`;
+
+  if (getSiteMode() === 'channel' && getSiteChannel() === channelId) {
+    return pathname;
+  }
+
+  return `${siteOrigin(channelDomain)}${pathname}`;
+}
+
+let cachedEntries: Entry[] | null = null;
+
+function loadAllEntries(): Entry[] {
+  if (cachedEntries) return cachedEntries;
+
   const entries: Entry[] = [];
 
   if (!fs.existsSync(entriesRoot)) return entries;
@@ -160,6 +181,7 @@ export function getEntries(): Entry[] {
       entries.push({
         channel: channel.id,
         channelRoute: channel.route,
+        channelDomain: channel.domain,
         channelZh: channel.zh,
         channelEn: channel.en,
         annotationZh: channel.annotationZh,
@@ -189,20 +211,34 @@ export function getEntries(): Entry[] {
         bodyHtmlEn,
         readingMinutesZh: readingMinutes(zh.body),
         readingMinutesEn: readingMinutes(en.body),
-        hrefZh: `/${channel.route}/${slug}/`,
-        hrefEn: `/en/${channel.route}/${slug}/`,
+        hrefZh: pathFor(channel.id, channel.domain, slug, 'zh'),
+        hrefEn: pathFor(channel.id, channel.domain, slug, 'en'),
       });
     }
   }
 
-  return entries.sort((a, b) => {
+  cachedEntries = entries.sort((a, b) => {
     if (a.featured !== b.featured) return a.featured ? -1 : 1;
     return a.slug.localeCompare(b.slug);
   });
+
+  return cachedEntries;
+}
+
+export function getAllEntries(): Entry[] {
+  return loadAllEntries();
+}
+
+export function getEntries(): Entry[] {
+  const all = loadAllEntries();
+  const current = getSiteChannel();
+
+  if (!current) return all;
+  return all.filter((entry) => entry.channel === current);
 }
 
 export function getEntriesByChannel(channelId: string): Entry[] {
-  return getEntries().filter((entry) => entry.channel === channelId);
+  return loadAllEntries().filter((entry) => entry.channel === channelId);
 }
 
 export function getEntry(slug: string): Entry | undefined {
@@ -210,10 +246,57 @@ export function getEntry(slug: string): Entry | undefined {
 }
 
 export function getRelatedEntries(entry: Entry): Entry[] {
-  const all = getEntries();
+  const all = loadAllEntries();
   return entry.related
     .map((slug) => all.find((item) => item.slug === slug))
     .filter((item): item is Entry => Boolean(item));
+}
+
+export function getChannelHref(channel: ChannelMeta, lang: Lang): string {
+  const prefix = lang === 'en' ? '/en' : '';
+
+  if (getSiteMode() === 'channel' && getSiteChannel() === channel.id) {
+    return `${prefix}/`;
+  }
+
+  return `${siteOrigin(channel.domain)}${prefix}/`;
+}
+
+export interface SiteInfo {
+  mode: 'portal' | 'channel';
+  name: string;
+  tagline: string;
+  description: string;
+  domain: string;
+  channel: string | null;
+}
+
+export function getSiteInfo(lang: Lang): SiteInfo {
+  const mode = getSiteMode();
+  const current = getSiteChannel();
+  const channel = current ? channelMap.get(current) : undefined;
+
+  if (mode === 'channel' && channel) {
+    return {
+      mode,
+      name: lang === 'zh' ? channel.zh : channel.en,
+      tagline: lang === 'zh' ? channel.annotationZh : channel.annotationEn,
+      description: lang === 'zh' ? channel.descriptionZh : channel.descriptionEn,
+      domain: channel.domain,
+      channel: channel.id,
+    };
+  }
+
+  return {
+    mode: 'portal',
+    name: lang === 'zh' ? '稀奇奇' : 'XIQIQI',
+    tagline: lang === 'zh' ? '无奇不有' : 'Nothing Is Too Strange',
+    description: lang === 'zh'
+      ? '收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。中英双语，开源共建。'
+      : 'An open-source archive of strange events, stories, objects, places, and creatures from around the world.',
+    domain: lang === 'zh' ? 'xiqiqi.com' : 'xiqiqi.com',
+    channel: null,
+  };
 }
 
 export function entryWallMeta(entry: Entry, lang: Lang): string {

@@ -8,13 +8,19 @@ const data = getHomepageData('en');
 if (!data) {
   throw new Error('No content found. Run npm run sync and check oddities-and-mysteries.');
 }
+
+const pageTitle = data.channelMode
+  ? `${data.siteName} · ${data.siteTagline} · XIQIQI`
+  : 'XIQIQI · Nothing Is Too Strange';
 ---
 
 <SiteLayout
-  title="XIQIQI · Nothing Is Too Strange"
-  description="An open-source archive of strange events, stories, objects, places, and creatures from around the world."
+  title={pageTitle}
+  description={data.siteDescription}
   lang="en"
   langSwitchHref="/"
+  randomChannel={data.randomChannel}
+  image={data.heroImage}
 >
   <Hero
     kicker={data.heroKicker}
@@ -23,7 +29,7 @@ if (!data) {
     summary={data.heroSummary}
     image={data.heroImage}
     imageAlt={data.heroTitle}
-    href={data.heroHref}
+    href={data.heroHref || undefined}
     ctaLabel={data.ctaLabel}
     stats={data.stats}
   />
@@ -31,18 +37,22 @@ if (!data) {
   <ImageWall items={data.wallItems} />
 
   <section class="random-full">
-    <img class="random-bg" src="/content/inline/tunguska-aerial.jpg" alt="" />
+    <img class="random-bg" src={data.heroImage} alt="" />
     <div class="random-shade"></div>
     <div class="container random-content">
       <img class="random-rhino" src="/assets/rhino-sticker.svg" alt="XIQIQI rhino" />
       <div>
         <p class="kicker">RANDOM / Flip a page</p>
         <h2>Not sure where to start?<br>Let the rhino pick a page.</h2>
-        <p class="random-copy">One random entry from the archive. Could be Tunguska, could be a diamond that ruined a queen.</p>
+        <p class="random-copy">
+          {data.channelMode
+            ? `One random entry from the ${data.entries.length} in ${data.siteName}. Wherever it lands, that is the page.`
+            : `One random entry from ${data.entries.length} archived stories. Could be a visitor from the sky, could be a diamond that ruined a queen.`}
+        </p>
         <button class="btn-primary random-cta" type="button" data-random>Random jump ↗</button>
       </div>
     </div>
-    <span class="random-credit">Background illustration: Oddity Archive / CC BY-SA 4.0</span>
+    <span class="random-credit">Background: entry cover · Oddity Archive</span>
   </section>
 </SiteLayout>
 

@@ -1,15 +1,22 @@
 ---
-import { getChannels } from '../lib/content';
+import { getChannelHref, getChannels } from '../lib/content';
 import { ui } from '../lib/i18n';
 
 interface Props {
   lang?: 'zh' | 'en';
+  siteName?: string;
+  siteTagline?: string;
 }
 
-const { lang = 'zh' } = Astro.props;
+const {
+  lang = 'zh',
+  siteName = '稀奇奇',
+  siteTagline,
+} = Astro.props;
 const copy = ui(lang).footer;
 const channels = getChannels();
-const prefix = lang === 'en' ? '/en' : '';
+const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
+const issuesUrl = `${repoUrl}/issues/new`;
 ---
 
 <footer class="site-footer">
@@ -18,15 +25,15 @@ const prefix = lang === 'en' ? '/en' : '';
       <div class="footer-brand">
         <img src="/assets/rhino.svg" alt="" width="44" height="44" />
         <div>
-          <h3>稀奇奇</h3>
-          <p class="footer-tagline">{copy.tagline}</p>
+          <h3>{siteName}</h3>
+          <p class="footer-tagline">{siteTagline || copy.tagline}</p>
           <p>{copy.description}</p>
         </div>
       </div>
       <div class="footer-col">
         <h4>{copy.channels}</h4>
         {channels.map((channel) => (
-          <a href={`${prefix}/${channel.route}/`}>
+          <a href={getChannelHref(channel, lang)}>
             {lang === 'zh'
               ? `${channel.zh} · ${channel.annotationZh}`
               : `${channel.en} · ${channel.annotationEn}`}
@@ -35,13 +42,13 @@ const prefix = lang === 'en' ? '/en' : '';
       </div>
       <div class="footer-col">
         <h4>{copy.about}</h4>
-        <a href="#">{copy.submit}</a>
-        <a href="#">{copy.guidelines}</a>
-        <a href="#">{copy.credibility}</a>
+        <a href={issuesUrl}>{copy.submit}</a>
+        <a href={repoUrl}>{copy.guidelines}</a>
+        <a href={repoUrl}>{copy.credibility}</a>
       </div>
       <div class="footer-col">
         <h4>{copy.openSource}</h4>
-        <p>{copy.contentRepo}</p>
+        <a href={repoUrl}>{copy.contentRepo}</a>
         <p>{copy.contentLicense}</p>
         <p>{copy.imageLicense}</p>
       </div>

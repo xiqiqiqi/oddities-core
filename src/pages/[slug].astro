@@ -1,65 +1,66 @@
 ---
-import SiteLayout from '../../../layouts/SiteLayout.astro';
-import Hero from '../../../components/Hero.astro';
-import EntryBody from '../../../components/EntryBody.astro';
-import SourceLedger from '../../../components/SourceLedger.astro';
-import RelatedEntries from '../../../components/RelatedEntries.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Hero from '../components/Hero.astro';
+import EntryBody from '../components/EntryBody.astro';
+import SourceLedger from '../components/SourceLedger.astro';
+import RelatedEntries from '../components/RelatedEntries.astro';
 import {
   entryHeroMeta,
   getEntries,
   getRelatedEntries,
-} from '../../../lib/content';
-import { ui } from '../../../lib/i18n';
+} from '../lib/content';
+import { ui } from '../lib/i18n';
+import { getSiteMode } from '../lib/site';
 
 export function getStaticPaths() {
-  return getEntries()
-    .filter((entry) => entry.translationStatus !== 'zh_only')
-    .map((entry) => ({
-      params: { channel: entry.channelRoute, slug: entry.slug },
-      props: { entry },
-    }));
+  if (getSiteMode() !== 'channel') return [];
+
+  return getEntries().map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;
 const related = getRelatedEntries(entry);
-const copy = ui('en').labels;
+const copy = ui('zh').labels;
 const credibility = copy.credibility[entry.credibility] || entry.credibility;
 ---
 
 <SiteLayout
-  title={`${entry.titleEn} · ${entry.channelEn} · XIQIQI`}
-  description={entry.summaryEn}
-  lang="en"
-  langSwitchHref={entry.hrefZh}
+  title={`${entry.titleZh} · ${entry.channelZh} · 稀奇奇`}
+  description={entry.summaryZh}
+  lang="zh"
+  langSwitchHref={entry.translationStatus === 'zh_only' ? '/en/' : `/en/${entry.slug}/`}
   randomChannel={entry.channel}
+  image={entry.cover}
 >
   <Hero
-    kicker={`${entry.channelEn} · ${entry.annotationEn}`}
-    meta={entryHeroMeta(entry, 'en')}
-    title={entry.titleEn}
-    summary={entry.summaryEn}
+    kicker={`${entry.channelZh} · ${entry.annotationZh}`}
+    meta={entryHeroMeta(entry, 'zh')}
+    title={entry.titleZh}
+    summary={entry.summaryZh}
     image={entry.cover}
-    imageAlt={entry.titleEn}
+    imageAlt={entry.titleZh}
   />
 
   <div class="entry-content">
     <div class="entry-meta">
-      <span>Oddity Archive</span>
-      <span>{entry.sourceCount} sources</span>
+      <span>稀奇奇编辑部</span>
+      <span>{entry.sourceCount} 条来源</span>
       <span class={`credibility credibility--${entry.credibility}`}>{credibility}</span>
     </div>
 
     <EntryBody>
-      <Fragment set:html={entry.bodyHtmlEn} />
+      <Fragment set:html={entry.bodyHtmlZh} />
     </EntryBody>
 
-    <SourceLedger sources={entry.sources} title={copy.sourceLedger} lang="en" />
+    <SourceLedger sources={entry.sources} title={copy.sourceLedger} lang="zh" />
 
-    {related.length > 0 && <RelatedEntries entries={related} lang="en" />}
+    {related.length > 0 && <RelatedEntries entries={related} lang="zh" />}
 
     <p class="license-note">
-      Text, original maps, and reconstruction illustrations are licensed under CC BY-SA 4.0.
-      Reconstruction illustrations are not historical photographs.
+      本文文字、原创地图与场景复原插图采用 CC BY-SA 4.0。场景复原插图不是历史照片。
     </p>
   </div>
 </SiteLayout>
