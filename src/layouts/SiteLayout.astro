@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
 import SearchOverlay from '../components/SearchOverlay.astro';
+import MobileTabBar from '../components/MobileTabBar.astro';
 import { getEntries, getSiteInfo } from '../lib/content';
 
 interface Props {
@@ -74,6 +75,7 @@ const randomEntries = randomChannel
     <slot />
   </main>
   <Footer lang={lang} siteName={resolvedName} siteTagline={resolvedTagline} />
+  <MobileTabBar lang={lang} />
   <SearchOverlay entries={searchEntries} lang={lang} />
 
   <div hidden>

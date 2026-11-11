@@ -21,7 +21,6 @@ const {
 const channels = getChannels();
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
-const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
 const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
 ---
 
@@ -56,27 +55,8 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
       <button class="random-btn" type="button" data-random>
         {randomLabel} <span>↗</span>
       </button>
-      <button
-        class="icon-btn menu-btn"
-        type="button"
-        data-menu-toggle
-        aria-label={menuLabel}
-        aria-expanded="false"
-      >
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M3 7 H21 M3 12 H21 M3 17 H21"></path>
-        </svg>
-      </button>
     </div>
   </div>
-
-  <nav class="mobile-nav container" data-mobile-nav aria-label={lang === 'zh' ? '移动端导航' : 'Mobile navigation'}>
-    {channels.map((channel) => (
-      <a href={getChannelHref(channel, lang)}>
-        {lang === 'zh' ? channel.zh : channel.en}
-      </a>
-    ))}
-  </nav>
 </header>
 
 <style>
@@ -199,24 +179,24 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     display: none;
   }
 
-  .mobile-nav {
-    display: none;
-    flex-direction: column;
-    gap: 12px;
-    padding-bottom: 18px;
-    border-top: 1px solid var(--line);
-  }
-
-  .mobile-nav.is-open {
-    display: flex;
-  }
-
-  .mobile-nav a {
-    color: var(--ink-2);
-    font-size: 14px;
-  }
-
   @media (max-width: 920px) {
+    .masthead {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .masthead-inner {
+      min-height: 60px;
+      gap: 12px;
+    }
+
+    .brand-cn {
+      font-size: 18px;
+    }
+
+    .brand-en {
+      display: none;
+    }
+
     .main-nav {
       display: none;
     }
@@ -224,19 +204,11 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     .random-btn {
       display: none;
     }
-
-    .menu-btn {
-      display: inline-flex;
-    }
   }
 
   @media (max-width: 580px) {
     .masthead-actions {
       gap: 6px;
-    }
-
-    .brand-en {
-      display: none;
     }
   }
 </style>

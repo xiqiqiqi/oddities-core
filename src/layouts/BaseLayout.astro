@@ -41,6 +41,12 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
     {alternate && <link rel="alternate" hreflang={alternateLang} href={alternate} />}
     <link rel="alternate" hreflang={selfLang} href={canonical} />
     <link rel="icon" href="/assets/rhino.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content={siteName} />
     <meta name="theme-color" content={theme === 'dark' ? '#12100E' : '#F3EEE4'} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
@@ -88,8 +94,8 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
 
         var overlay = document.querySelector('[data-search-overlay]');
         var input = document.querySelector('[data-search-input]');
-        var openButton = document.querySelector('[data-search-open]');
-        var closeButton = document.querySelector('[data-search-close]');
+        var closeButtons = document.querySelectorAll('[data-search-close]');
+        var openButtons = document.querySelectorAll('[data-search-open]');
         var empty = document.querySelector('[data-search-empty]');
 
         function filterSearch(query) {
@@ -119,33 +125,53 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
           }
         }
 
-        if (openButton) openButton.addEventListener('click', function () { toggleSearch(true); });
-        if (closeButton) closeButton.addEventListener('click', function () { toggleSearch(false); });
-        if (input) input.addEventListener('input', function () { filterSearch(input.value); });
-
-        document.addEventListener('keydown', function (event) {
-          if (event.key === 'Escape') toggleSearch(false);
-        });
-
-        var menuButton = document.querySelector('[data-menu-toggle]');
-        var mobileNav = document.querySelector('[data-mobile-nav]');
-
-        if (menuButton && mobileNav) {
-          menuButton.addEventListener('click', function () {
-            var isOpen = mobileNav.classList.toggle('is-open');
-            menuButton.setAttribute('aria-expanded', String(isOpen));
+        if (openButtons.length) {
+          Array.prototype.forEach.call(openButtons, function (button) {
+            button.addEventListener('click', function () { toggleSearch(true); });
           });
         }
 
-        var randomButton = document.querySelector('[data-random]');
-        if (randomButton) {
+        if (closeButtons.length) {
+          Array.prototype.forEach.call(closeButtons, function (button) {
+            button.addEventListener('click', function () { toggleSearch(false); });
+          });
+        }
+
+        if (input) input.addEventListener('input', function () { filterSearch(input.value); });
+
+        var sheet = document.querySelector('[data-channel-sheet]');
+
+        function toggleSheet(show) {
+          if (!sheet) return;
+          sheet.hidden = !show;
+          document.body.style.overflow = show ? 'hidden' : '';
+        }
+
+        document.addEventListener('click', function (event) {
+          var target = isElement(event.target) ? event.target.closest('[data-channel-sheet-open]') : null;
+          if (target) toggleSheet(true);
+        });
+
+        Array.prototype.forEach.call(document.querySelectorAll('[data-channel-sheet-close]'), function (button) {
+          button.addEventListener('click', function () { toggleSheet(false); });
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape') {
+            toggleSearch(false);
+            toggleSheet(false);
+          }
+        });
+
+        var randomButtons = document.querySelectorAll('[data-random]');
+        Array.prototype.forEach.call(randomButtons, function (randomButton) {
           randomButton.addEventListener('click', function () {
             var links = document.querySelectorAll('[data-random-link]');
             if (!links.length) return;
             var target = links[Math.floor(Math.random() * links.length)];
             window.location.href = target.getAttribute('href');
           });
-        }
+        });
 
         function daySeed() {
           var now = new Date();
@@ -182,6 +208,12 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
             wall.appendChild(card);
           });
         });
+
+        if ('serviceWorker' in navigator && location.protocol === 'https:') {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js').catch(function () {});
+          });
+        }
       })();
     </script>
   </body>

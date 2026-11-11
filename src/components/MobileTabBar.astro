@@ -1,0 +1,315 @@
+---
+import { getChannelHref, getChannels, getSiteInfo } from '../lib/content';
+
+interface Props {
+  lang?: 'zh' | 'en';
+}
+
+const { lang = 'zh' } = Astro.props;
+
+const site = getSiteInfo(lang);
+const channels = getChannels();
+const homePath = lang === 'en' ? '/en/' : '/';
+const isHome = Astro.url.pathname === homePath;
+
+const labels = lang === 'zh'
+  ? {
+      nav: '移动端导航',
+      home: '首页',
+      channels: '频道',
+      random: '随机',
+      search: '搜索',
+      sheetKicker: 'CHANNELS / 频道',
+      close: '关闭 ✕',
+      current: '当前',
+      note: '五个频道各自独立成站，底部标签在任意页面都能用。',
+    }
+  : {
+      nav: 'Mobile navigation',
+      home: 'Home',
+      channels: 'Channels',
+      random: 'Random',
+      search: 'Search',
+      sheetKicker: 'CHANNELS',
+      close: 'Close ✕',
+      current: 'Current',
+      note: 'Each channel is its own site. The tab bar works on every page.',
+    };
+
+const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
+const items = [
+  {
+    id: 'portal',
+    name: lang === 'zh' ? '稀奇奇' : 'XIQIQI',
+    tag: lang === 'zh' ? '无奇不有' : 'Nothing Is Too Strange',
+    href: portalHref,
+    current: site.mode === 'portal',
+  },
+  ...channels.map((channel) => ({
+    id: channel.id,
+    name: lang === 'zh' ? channel.zh : channel.en,
+    tag: lang === 'zh' ? channel.annotationZh : channel.annotationEn,
+    href: getChannelHref(channel, lang),
+    current: site.channel === channel.id,
+  })),
+];
+---
+
+<nav class="mobile-tabs" aria-label={labels.nav}>
+  <a class:list={['tab', isHome && 'is-active']} href={homePath} aria-current={isHome ? 'page' : undefined}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"></path>
+    </svg>
+    <span>{labels.home}</span>
+  </a>
+
+  <button class:list={['tab', !isHome && 'is-active']} type="button" data-channel-sheet-open>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+      <rect x="4" y="4" width="7" height="7" rx="1.4"></rect>
+      <rect x="13" y="4" width="7" height="7" rx="1.4"></rect>
+      <rect x="4" y="13" width="7" height="7" rx="1.4"></rect>
+      <rect x="13" y="13" width="7" height="7" rx="1.4"></rect>
+    </svg>
+    <span>{labels.channels}</span>
+  </button>
+
+  <button class="tab" type="button" data-random>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+      <circle cx="9" cy="9" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="15" cy="9" r="1.2" fill="currentColor" stroke="none"></circle>
+      <circle cx="9" cy="15" r="1.2" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <span>{labels.random}</span>
+  </button>
+
+  <button class="tab" type="button" data-search-open>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16.5 16.5 21 21"></path>
+    </svg>
+    <span>{labels.search}</span>
+  </button>
+</nav>
+
+<div class="channel-sheet" data-channel-sheet hidden>
+  <button class="sheet-backdrop" type="button" data-channel-sheet-close aria-label={labels.close}></button>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-label={labels.channels}>
+    <span class="sheet-grab"></span>
+    <div class="sheet-head">
+      <p class="sheet-kicker">{labels.sheetKicker}</p>
+      <button class="sheet-close" type="button" data-channel-sheet-close>{labels.close}</button>
+    </div>
+    <div class="sheet-list">
+      {items.map((item) => (
+        <a
+          class:list={['sheet-item', item.current && 'is-current']}
+          href={item.href}
+          aria-current={item.current ? 'page' : undefined}
+        >
+          <span class="sheet-name">{item.name}</span>
+          <span class="sheet-tag">{item.tag}</span>
+          {item.current && <span class="sheet-current">{labels.current}</span>}
+        </a>
+      ))}
+    </div>
+    <p class="sheet-note">{labels.note}</p>
+  </div>
+</div>
+
+<style>
+  .mobile-tabs {
+    display: none;
+  }
+
+  .channel-sheet {
+    display: none;
+  }
+
+  @media (max-width: 920px) {
+    .mobile-tabs {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 150;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      min-height: 50px;
+      padding: 4px 2px;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: color 150ms ease, background 150ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .tab.is-active {
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .tab:active {
+      transform: scale(0.96);
+    }
+
+    .channel-sheet {
+      position: fixed;
+      inset: 0;
+      z-index: 190;
+      display: block;
+    }
+
+    .channel-sheet[hidden] {
+      display: none;
+    }
+
+    .sheet-backdrop {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: rgba(8, 7, 6, 0.58);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      animation: fadeIn 180ms ease;
+    }
+
+    .sheet-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 18px calc(20px + env(safe-area-inset-bottom));
+      border-radius: 24px 24px 0 0;
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+      animation: sheetUp 240ms cubic-bezier(0.22, 0.8, 0.24, 1);
+    }
+
+    .sheet-grab {
+      display: block;
+      width: 44px;
+      height: 4px;
+      margin: 2px auto 12px;
+      border-radius: 999px;
+      background: var(--line-strong);
+    }
+
+    .sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .sheet-kicker {
+      margin: 0;
+      color: var(--amber);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+    }
+
+    .sheet-close {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    .sheet-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sheet-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 15px 4px;
+      border-bottom: 1px solid var(--line);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sheet-item:active {
+      background: var(--amber-soft);
+    }
+
+    .sheet-name {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 600;
+    }
+
+    .sheet-tag {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .sheet-current {
+      margin-left: auto;
+      color: var(--amber);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+    }
+
+    .sheet-item.is-current .sheet-name {
+      color: var(--amber);
+    }
+
+    .sheet-note {
+      margin: 14px 4px 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+  }
+
+  @keyframes sheetUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

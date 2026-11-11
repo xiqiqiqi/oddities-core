@@ -158,6 +158,15 @@ const copy = lang === 'zh'
   }
 
   @media (max-width: 620px) {
+    .search-overlay {
+      padding-top: calc(64px + env(safe-area-inset-top));
+      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    .search-close {
+      top: calc(20px + env(safe-area-inset-top));
+    }
+
     .search-result {
       flex-direction: column;
       gap: 4px;

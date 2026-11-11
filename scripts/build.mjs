@@ -83,6 +83,71 @@ function writeRobots(outDir, siteUrl) {
   );
 }
 
+function writePwa(outDir, config) {
+  const name = `${config.name} · ${config.tagline || '稀奇奇'}`;
+  const manifest = {
+    name,
+    short_name: config.name,
+    description: '收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。',
+    lang: 'zh-CN',
+    id: '/',
+    start_url: '/',
+    scope: '/',
+    display: 'standalone',
+    orientation: 'portrait',
+    background_color: '#12100E',
+    theme_color: '#12100E',
+    icons: [
+      { src: '/assets/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+    ],
+  };
+
+  fs.writeFileSync(
+    path.join(outDir, 'manifest.webmanifest'),
+    `${JSON.stringify(manifest, null, 2)}\n`
+  );
+
+  fs.writeFileSync(
+    path.join(outDir, 'sw.js'),
+    `const CACHE = 'xiqiqi-v1';
+
+self.addEventListener('install', function () {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function (event) {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', function (event) {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+
+  const url = new URL(request.url);
+  if (url.origin !== location.origin) return;
+
+  event.respondWith(
+    fetch(request)
+      .then(function (response) {
+        if (response && response.status === 200 && response.type === 'basic') {
+          const copy = response.clone();
+          caches.open(CACHE).then(function (cache) {
+            cache.put(request, copy);
+          }).catch(function () {});
+        }
+        return response;
+      })
+      .catch(function () {
+        return caches.match(request);
+      })
+  );
+});
+`
+  );
+}
+
 const args = parseArgs(process.argv.slice(2));
 const configPath = path.resolve(
   process.cwd(),
@@ -178,5 +243,6 @@ fs.writeFileSync(path.join(outDir, '.nojekyll'), '');
 
 const pageCount = writeSitemap(outDir, siteUrl);
 writeRobots(outDir, siteUrl);
+writePwa(outDir, config);
 
 console.log(`[build] done      ${pageCount} pages -> ${outDir}`);

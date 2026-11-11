@@ -4,6 +4,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -85,4 +86,22 @@ html[data-lang="en"] .lang-zh {
 
 html[data-lang="en"] .lang-en {
   display: revert;
+}
+
+@media (max-width: 920px) {
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (hover: none) {
+  .btn-primary:hover {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
 }
