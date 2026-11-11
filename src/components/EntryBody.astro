@@ -1,0 +1,167 @@
+---
+interface Props {
+  title?: string;
+  summary?: string;
+}
+
+const { title, summary } = Astro.props;
+---
+
+<article class="entry-body">
+  {title && <h1>{title}</h1>}
+  {summary && <p class="entry-summary">{summary}</p>}
+  <div class="entry-prose">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .entry-body {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 0 40px;
+  }
+
+  h1 {
+    margin: 0 0 18px;
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .entry-summary {
+    margin: 0 0 42px;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.9;
+  }
+
+  .entry-prose {
+    color: var(--ink-2);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.95;
+  }
+
+  .entry-prose :global(p) {
+    margin: 0 0 20px;
+  }
+
+  .entry-prose :global(h2) {
+    margin: 48px 0 16px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .entry-prose :global(h3) {
+    margin: 34px 0 12px;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 23px;
+    line-height: 1.4;
+  }
+
+  .entry-prose :global(strong) {
+    color: var(--ink);
+  }
+
+  .entry-prose :global(a) {
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+
+  .entry-prose :global(a:hover) {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  .entry-prose :global(img) {
+    width: calc(100% + 64px);
+    max-width: none;
+    margin: 34px -32px 8px;
+  }
+
+  .entry-prose :global(p > em:only-child) {
+    display: block;
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-style: normal;
+    line-height: 1.6;
+  }
+
+  .entry-prose :global(blockquote) {
+    margin: 30px 0;
+    padding: 6px 0 6px 22px;
+    border-left: 3px solid var(--amber);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 21px;
+    line-height: 1.8;
+  }
+
+  .entry-prose :global(hr) {
+    margin: 42px 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .entry-prose :global(ul),
+  .entry-prose :global(ol) {
+    margin: 0 0 22px;
+    padding-left: 1.4em;
+  }
+
+  .entry-prose :global(li) {
+    margin: 0 0 8px;
+  }
+
+  .entry-prose :global(table) {
+    width: 100%;
+    margin: 24px 0;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .entry-prose :global(th),
+  .entry-prose :global(td) {
+    padding: 8px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .entry-prose :global(th) {
+    border-bottom-color: var(--ink);
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 680px) {
+    .entry-body {
+      padding-top: 48px;
+    }
+
+    .entry-prose {
+      font-size: 16px;
+    }
+
+    .entry-prose :global(h2) {
+      font-size: 25px;
+    }
+
+    .entry-prose :global(img) {
+      width: 100%;
+      margin: 26px 0 8px;
+    }
+  }
+</style>

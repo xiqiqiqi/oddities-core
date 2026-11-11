@@ -1,0 +1,98 @@
+---
+import { entryWallMeta, type Entry } from '../lib/content';
+import { ui } from '../lib/i18n';
+
+interface Props {
+  entries: Entry[];
+  lang?: 'zh' | 'en';
+}
+
+const { entries = [], lang = 'zh' } = Astro.props;
+const copy = ui(lang).labels;
+---
+
+<section class="related">
+  <h2>{copy.related}</h2>
+  <div class="related-grid">
+    {entries.map((entry) => (
+      <a class="related-card" href={lang === 'zh' ? entry.hrefZh : entry.hrefEn}>
+        <div class="related-image">
+          <img src={entry.cover} alt="" loading="lazy" />
+        </div>
+        <div class="related-meta">{entryWallMeta(entry, lang)}</div>
+        <h3>{lang === 'zh' ? entry.titleZh : entry.titleEn}</h3>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .related {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 2px solid var(--ink);
+  }
+
+  h2 {
+    margin: 0 0 20px;
+    font-family: var(--serif);
+    font-size: 26px;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .related-image {
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+
+  .related-image img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .related-card:hover img {
+    transform: scale(1.04);
+  }
+
+  .related-meta {
+    margin-top: 4px;
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 760px) {
+    .related-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

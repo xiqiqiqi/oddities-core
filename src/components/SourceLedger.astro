@@ -1,0 +1,101 @@
+---
+import type { SourceItem } from '../lib/content';
+
+interface Props {
+  sources: SourceItem[];
+  title?: string;
+  lang?: 'zh' | 'en';
+}
+
+const { sources = [], title = '来源台账', lang = 'zh' } = Astro.props;
+const headers = lang === 'zh'
+  ? ['编号', '来源', '作者 / 机构', '年份', '用途', '许可']
+  : ['ID', 'Source', 'Author / Institution', 'Year', 'Use', 'License'];
+---
+
+<section class="source-ledger">
+  <h2>{title}</h2>
+  <div class="source-table-wrap">
+    <table class="source-table">
+      <thead>
+        <tr>
+          {headers.map((header) => <th>{header}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {sources.map((source) => (
+          <tr>
+            <td class="source-id">{source.id}</td>
+            <td><a href={source.url} target="_blank" rel="noopener">{source.title}</a></td>
+            <td>{source.publisher}</td>
+            <td>{source.year}</td>
+            <td>{source.usage}</td>
+            <td>{source.license}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .source-ledger {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 2px solid var(--ink);
+  }
+
+  h2 {
+    margin: 0 0 18px;
+    font-family: var(--serif);
+    font-size: 26px;
+  }
+
+  .source-table-wrap {
+    overflow-x: auto;
+  }
+
+  .source-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  th {
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--ink);
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-2);
+    vertical-align: top;
+  }
+
+  .source-id {
+    color: var(--rust);
+    font-family: var(--mono);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  a {
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+
+  a:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+</style>

@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light;
+
+  --paper: #f3eee4;
+  --paper-2: #eae3d6;
+  --paper-3: #ded5c5;
+
+  --ink: #1d1a17;
+  --ink-2: #3a342e;
+  --muted: #6b6256;
+
+  --line: rgba(29, 26, 23, 0.14);
+  --line-strong: rgba(29, 26, 23, 0.3);
+
+  --amber: #d99a2b;
+  --amber-soft: rgba(217, 154, 43, 0.16);
+  --rust: #b44a32;
+  --moss: #3e5548;
+
+  --night: #1d1a17;
+  --night-fg: #f3eee4;
+
+  --serif: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --sans: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --gutter: 32px;
+  --max: 1240px;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #12100e;
+  --paper-2: #1b1815;
+  --paper-3: #2a251f;
+
+  --ink: #f3eee4;
+  --ink-2: #d8d0c4;
+  --muted: #9a9083;
+
+  --line: rgba(243, 238, 228, 0.14);
+  --line-strong: rgba(243, 238, 228, 0.3);
+
+  --amber: #e0a63a;
+  --amber-soft: rgba(224, 166, 58, 0.22);
+  --rust: #d06a50;
+  --moss: #5c7a68;
+
+  --night: #0b0a09;
+  --night-fg: #f3eee4;
+}

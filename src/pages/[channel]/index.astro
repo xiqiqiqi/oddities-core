@@ -1,0 +1,60 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ImageWall from '../../components/ImageWall.astro';
+import { entryWallMeta, getChannels, getEntriesByChannel } from '../../lib/content';
+
+export function getStaticPaths() {
+  return getChannels().map((channel) => ({
+    params: { channel: channel.route },
+    props: { channel },
+  }));
+}
+
+const { channel } = Astro.props;
+const entries = getEntriesByChannel(channel.id);
+const hero = entries[0];
+
+const wallItems = entries.map((entry, index) => ({
+  href: entry.hrefZh,
+  image: entry.cover,
+  alt: entry.titleZh,
+  meta: entryWallMeta(entry, 'zh'),
+  title: entry.titleZh,
+  ratio: (['wide', 'tall', 'square', 'portrait', 'wide'] as const)[index % 5],
+}));
+---
+
+<SiteLayout
+  title={`${channel.zh} · ${channel.annotationZh} · 稀奇奇`}
+  description={channel.descriptionZh}
+  lang="zh"
+  langSwitchHref={`/en/${channel.route}/`}
+  randomChannel={channel.id}
+>
+  <Hero
+    kicker={`${channel.zh} · ${channel.annotationZh}`}
+    meta={`${entries.length} 条已入库`}
+    title={channel.zh}
+    summary={channel.descriptionZh}
+    image={hero?.cover}
+    imageAlt={hero?.titleZh || channel.zh}
+  />
+
+  {entries.length > 0 ? (
+    <ImageWall items={wallItems} />
+  ) : (
+    <p class="empty">这个频道还在整理。</p>
+  )}
+</SiteLayout>
+
+<style>
+  .empty {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px var(--gutter) 100px;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 20px;
+  }
+</style>

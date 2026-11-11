@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="几何犀：默认表情">
+  <title>几何犀 · 默认</title>
+  <style>
+    .m-tile { fill: var(--rhino-tile, #2E2A26); }
+    .m-cream { fill: var(--rhino-cream, #F4EFE6); }
+    .m-horn { fill: var(--rhino-horn, #F3B34C); }
+    .m-horn-dark { fill: var(--rhino-horn-dark, #DE9A34); }
+    .m-blush { fill: var(--rhino-blush, #F4A3A3); opacity: .55; }
+    .m-ink { fill: var(--rhino-ink, #2E2A26); }
+  </style>
+
+  <rect class="m-tile" x="4" y="4" width="120" height="120" rx="30"/>
+
+  <circle cx="40" cy="44" r="13" class="m-cream"/>
+  <circle cx="40" cy="45" r="6" fill="var(--rhino-ear, #D8CFC0)"/>
+
+  <path class="m-cream" d="M30 78 C30 54 46 38 68 38 C90 38 106 52 108 68 C109 74 108 78 112 82 C118 88 118 98 112 104 C106 110 96 110 88 106 C80 112 66 114 54 110 C40 105 30 94 30 82 Z"/>
+
+  <path class="m-horn-dark" d="M76 66 C80 56 85 48 91 42 C92 52 90 61 86 69 Z"/>
+  <path class="m-horn" d="M88 76 C92 58 98 44 106 30 C112 46 114 62 110 78 Z"/>
+
+  <circle cx="70" cy="74" r="6.5" class="m-ink"/>
+  <circle cx="67.8" cy="71.8" r="2" fill="#FFFFFF"/>
+  <circle cx="106" cy="96" r="3" class="m-ink"/>
+  <path d="M94 101 C98 104 102 103 105 100" fill="none" stroke="var(--rhino-ink, #2E2A26)" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="54" cy="92" r="7.5" class="m-blush"/>
+</svg>

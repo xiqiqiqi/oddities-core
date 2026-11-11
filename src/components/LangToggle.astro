@@ -1,0 +1,39 @@
+---
+interface Props {
+  lang?: 'zh' | 'en';
+  href: string;
+}
+
+const { lang = 'zh', href } = Astro.props;
+---
+<a
+  class="lang-toggle"
+  href={href}
+  aria-label={lang === 'zh' ? 'Switch to English' : '切换到中文'}
+>
+  {lang === 'zh' ? 'EN' : '中'}
+</a>
+
+<style>
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .lang-toggle:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+</style>

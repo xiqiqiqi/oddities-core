@@ -1,0 +1,243 @@
+---
+import Rhino from './Rhino.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import LangToggle from './LangToggle.astro';
+import { getChannels } from '../lib/content';
+
+interface Props {
+  siteName?: string;
+  tagline?: string;
+  lang?: 'zh' | 'en';
+  langSwitchHref: string;
+}
+
+const {
+  siteName = '稀奇奇',
+  tagline = '无奇不有',
+  lang = 'zh',
+  langSwitchHref,
+} = Astro.props;
+
+const channels = getChannels();
+const prefix = lang === 'en' ? '/en' : '';
+const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
+const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
+const menuLabel = lang === 'zh' ? '菜单' : 'Menu';
+const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
+---
+
+<header class="masthead">
+  <div class="container masthead-inner">
+    <a class="brand" href={lang === 'en' ? '/en/' : '/'} aria-label={homeLabel}>
+      <Rhino size={38} />
+      <span class="brand-copy">
+        <span class="brand-cn">{siteName}</span>
+        <span class="brand-tagline">{tagline}</span>
+        <span class="brand-en">THE ODDITY ARCHIVE</span>
+      </span>
+    </a>
+
+    <nav class="main-nav" aria-label={lang === 'zh' ? '频道导航' : 'Channel navigation'}>
+      {channels.map((channel) => (
+        <a href={`${prefix}/${channel.route}/`}>
+          {lang === 'zh' ? channel.zh : channel.en}
+        </a>
+      ))}
+    </nav>
+
+    <div class="masthead-actions">
+      <button class="icon-btn" type="button" data-search-open aria-label={searchLabel}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M16.5 16.5 L21 21"></path>
+        </svg>
+      </button>
+      <ThemeToggle />
+      <LangToggle lang={lang} href={langSwitchHref} />
+      <button class="random-btn" type="button" data-random>
+        {randomLabel} <span>↗</span>
+      </button>
+      <button
+        class="icon-btn menu-btn"
+        type="button"
+        data-menu-toggle
+        aria-label={menuLabel}
+        aria-expanded="false"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M3 7 H21 M3 12 H21 M3 17 H21"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav container" data-mobile-nav aria-label={lang === 'zh' ? '移动端导航' : 'Mobile navigation'}>
+    {channels.map((channel) => (
+      <a href={`${prefix}/${channel.route}/`}>
+        {lang === 'zh' ? channel.zh : channel.en}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .masthead {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(16px);
+  }
+
+  .masthead-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 78px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: none;
+  }
+
+  .brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.15;
+  }
+
+  .brand-cn {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .brand-tagline {
+    color: var(--amber);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+  }
+
+  .brand-en {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .main-nav a {
+    color: var(--ink-2);
+    font-size: 13px;
+    transition: color 160ms ease;
+  }
+
+  .main-nav a:hover {
+    color: var(--amber);
+  }
+
+  .masthead-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .icon-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .random-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .random-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 18px;
+    border-top: 1px solid var(--line);
+  }
+
+  .mobile-nav.is-open {
+    display: flex;
+  }
+
+  .mobile-nav a {
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+
+  @media (max-width: 920px) {
+    .main-nav {
+      display: none;
+    }
+
+    .random-btn {
+      display: none;
+    }
+
+    .menu-btn {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .masthead-actions {
+      gap: 6px;
+    }
+
+    .brand-en {
+      display: none;
+    }
+  }
+</style>

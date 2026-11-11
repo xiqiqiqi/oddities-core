@@ -1,0 +1,143 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ImageWall from '../../components/ImageWall.astro';
+import { getHomepageData } from '../../lib/home';
+
+const data = getHomepageData('en');
+if (!data) {
+  throw new Error('No content found. Run npm run sync and check oddities-and-mysteries.');
+}
+---
+
+<SiteLayout
+  title="XIQIQI · Nothing Is Too Strange"
+  description="An open-source archive of strange events, stories, objects, places, and creatures from around the world."
+  lang="en"
+  langSwitchHref="/"
+>
+  <Hero
+    kicker={data.heroKicker}
+    meta={data.heroMeta}
+    title={data.heroTitle}
+    summary={data.heroSummary}
+    image={data.heroImage}
+    imageAlt={data.heroTitle}
+    href={data.heroHref}
+    ctaLabel={data.ctaLabel}
+    stats={data.stats}
+  />
+
+  <ImageWall items={data.wallItems} />
+
+  <section class="random-full">
+    <img class="random-bg" src="/content/inline/tunguska-aerial.jpg" alt="" />
+    <div class="random-shade"></div>
+    <div class="container random-content">
+      <img class="random-rhino" src="/assets/rhino-sticker.svg" alt="XIQIQI rhino" />
+      <div>
+        <p class="kicker">RANDOM / Flip a page</p>
+        <h2>Not sure where to start?<br>Let the rhino pick a page.</h2>
+        <p class="random-copy">One random entry from the archive. Could be Tunguska, could be a diamond that ruined a queen.</p>
+        <button class="btn-primary random-cta" type="button" data-random>Random jump ↗</button>
+      </div>
+    </div>
+    <span class="random-credit">Background illustration: Oddity Archive / CC BY-SA 4.0</span>
+  </section>
+</SiteLayout>
+
+<style>
+  .random-full {
+    position: relative;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--night);
+    color: var(--night-fg);
+  }
+
+  .random-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .random-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(10, 9, 8, 0.92) 0%, rgba(10, 9, 8, 0.45) 55%, rgba(10, 9, 8, 0.3) 100%),
+      linear-gradient(0deg, rgba(10, 9, 8, 0.6) 0%, transparent 55%);
+  }
+
+  .random-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 42px;
+    padding: 80px 0;
+  }
+
+  .random-rhino {
+    width: 150px;
+    height: 150px;
+    flex: none;
+  }
+
+  .random-content h2 {
+    margin: 12px 0 14px;
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 78px);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+  }
+
+  .random-copy {
+    max-width: 520px;
+    color: rgba(243, 238, 228, 0.68);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.9;
+  }
+
+  .random-cta {
+    margin-top: 24px;
+    border-color: var(--amber);
+    background: var(--amber);
+    color: #1d1a17;
+  }
+
+  .random-credit {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 22px;
+    color: rgba(243, 238, 228, 0.4);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 720px) {
+    .random-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 64px 0;
+    }
+
+    .random-rhino {
+      width: 100px;
+      height: 100px;
+    }
+
+    .random-credit {
+      left: var(--gutter);
+      right: auto;
+    }
+  }
+</style>

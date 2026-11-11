@@ -1,0 +1,55 @@
+brand:
+  name: 稀奇奇
+  tagline: 无奇不有
+  english: THE ODDITY ARCHIVE
+
+nav:
+  mystery: 未解之谜
+  tales: 离奇故事
+  objects: 奇物
+  places: 奇境
+  creatures: 奇兽
+
+annotations:
+  mystery: 匪夷所思
+  tales: 千奇百怪
+  objects: 奇珍异宝
+  places: 别有洞天
+  creatures: 珍禽异兽
+  portal: 无奇不有
+
+actions:
+  search: 搜索
+  random: 随机一条
+  theme: 切换明暗
+  language: 切换语言
+  menu: 菜单
+
+labels:
+  readTime: 阅读 {minutes} 分钟
+  sources: 来源
+  sourceLedger: 来源台账
+  related: 相关条目
+  license: 版权说明
+  published: 发布
+  updated: 更新
+  credibility:
+    verified: 已核实
+    disputed: 争议
+    folklore: 传说
+    hoax: 骗局
+  languageNotice: 英文翻译正在整理，以下是中文原文。
+
+footer:
+  tagline: 稀奇不稀奇？无奇不有。
+  description: 收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。
+  channels: 频道
+  about: 关于
+  submit: 投稿一条奇闻
+  guidelines: 编辑规范
+  credibility: 可信度分级
+  contact: 联系我们
+  openSource: 开源与许可
+  contentRepo: 内容仓：oddities-and-mysteries
+  contentLicense: 文字与原创插图：CC BY-SA 4.0
+  imageLicense: 历史图片：见文章底部来源台账

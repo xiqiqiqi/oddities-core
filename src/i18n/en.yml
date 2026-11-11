@@ -1,0 +1,55 @@
+brand:
+  name: XIQIQI
+  tagline: NOTHING IS TOO STRANGE
+  english: THE ODDITY ARCHIVE
+
+nav:
+  mystery: Mysteries
+  tales: Strange Tales
+  objects: Objects
+  places: Places
+  creatures: Creatures
+
+annotations:
+  mystery: Beyond Belief
+  tales: A Thousand Oddities
+  objects: Rare Treasures
+  places: Hidden Worlds
+  creatures: Rare Beasts
+  portal: Nothing Is Too Strange
+
+actions:
+  search: Search
+  random: Random
+  theme: Toggle theme
+  language: Toggle language
+  menu: Menu
+
+labels:
+  readTime: "{minutes} min read"
+  sources: Sources
+  sourceLedger: Source ledger
+  related: Related entries
+  license: License
+  published: Published
+  updated: Updated
+  credibility:
+    verified: Verified
+    disputed: Disputed
+    folklore: Folklore
+    hoax: Hoax
+  languageNotice: The English translation is in progress. The Chinese original follows.
+
+footer:
+  tagline: Strange or not, nothing is too strange.
+  description: An open-source archive of odd events, stories, objects, places, and creatures from around the world.
+  channels: Channels
+  about: About
+  submit: Submit an oddity
+  guidelines: Editorial guidelines
+  credibility: Credibility levels
+  contact: Contact
+  openSource: Open source & license
+  contentRepo: "Content repo: oddities-and-mysteries"
+  contentLicense: "Text & original art: CC BY-SA 4.0"
+  imageLicense: "Historical images: see the source ledger at the end of each story"

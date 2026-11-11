@@ -1,0 +1,22 @@
+{
+  "name": "@xiqiqi/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "稀奇奇统一 UI、组件、i18n 与构建脚本。",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sync": "node scripts/sync-assets.mjs",
+    "dev": "node scripts/sync-assets.mjs && astro dev",
+    "build": "node scripts/sync-assets.mjs && astro build",
+    "preview": "astro preview",
+    "validate": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "astro": "^4.16.0",
+    "js-yaml": "^4.1.0",
+    "marked": "^18.2.0"
+  }
+}

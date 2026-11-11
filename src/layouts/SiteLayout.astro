@@ -1,0 +1,68 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import SearchOverlay from '../components/SearchOverlay.astro';
+import { getEntries } from '../lib/content';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: 'zh' | 'en';
+  theme?: 'light' | 'dark';
+  siteName?: string;
+  tagline?: string;
+  langSwitchHref: string;
+  randomChannel?: string;
+}
+
+const {
+  title,
+  description,
+  lang = 'zh',
+  theme = 'dark',
+  siteName = '稀奇奇',
+  tagline = '无奇不有',
+  langSwitchHref,
+  randomChannel,
+} = Astro.props;
+
+const entries = getEntries();
+const searchEntries = entries.map((entry) => ({
+  href: lang === 'zh' ? entry.hrefZh : entry.hrefEn,
+  channel: entry.channel,
+  title: lang === 'zh' ? entry.titleZh : entry.titleEn,
+  meta: `${lang === 'zh' ? entry.channelZh : entry.channelEn} · ${entry.era}`,
+  haystack: [
+    entry.titleZh,
+    entry.titleEn,
+    entry.summaryZh,
+    entry.summaryEn,
+    entry.tags.join(' '),
+    entry.region,
+    entry.regionEn,
+  ].join(' '),
+}));
+
+const randomEntries = randomChannel
+  ? searchEntries.filter((entry) => entry.channel === randomChannel)
+  : searchEntries;
+---
+
+<BaseLayout title={title} description={description} lang={lang} theme={theme}>
+  <Masthead
+    siteName={siteName}
+    tagline={tagline}
+    lang={lang}
+    langSwitchHref={langSwitchHref}
+  />
+  <main>
+    <slot />
+  </main>
+  <Footer lang={lang} />
+  <SearchOverlay entries={searchEntries} lang={lang} />
+
+  <div hidden>
+    {randomEntries.map((entry) => <a data-random-link href={entry.href}></a>)}
+  </div>
+</BaseLayout>

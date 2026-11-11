@@ -1,0 +1,166 @@
+---
+interface SearchEntry {
+  href: string;
+  channel?: string;
+  title: string;
+  meta: string;
+  haystack: string;
+}
+
+interface Props {
+  entries: SearchEntry[];
+  lang?: 'zh' | 'en';
+}
+
+const { entries = [], lang = 'zh' } = Astro.props;
+
+const copy = lang === 'zh'
+  ? {
+      kicker: 'SEARCH / 搜索档案',
+      placeholder: '试试：通古斯、水怪、希望钻石',
+      hint: '输入关键词筛选，按 Esc 关闭。',
+      close: '关闭 ✕',
+      empty: '没有找到。换个词试试。',
+    }
+  : {
+      kicker: 'SEARCH / Find an entry',
+      placeholder: 'Try: Tunguska, sea monster, Hope Diamond',
+      hint: 'Type to filter. Press Esc to close.',
+      close: 'Close ✕',
+      empty: 'Nothing found. Try another word.',
+    };
+---
+
+<div class="search-overlay" data-search-overlay hidden>
+  <button class="search-close" type="button" data-search-close>{copy.close}</button>
+  <div class="search-box">
+    <label class="kicker" for="searchInput">{copy.kicker}</label>
+    <input
+      id="searchInput"
+      type="search"
+      data-search-input
+      placeholder={copy.placeholder}
+      autocomplete="off"
+    />
+    <p class="search-hint">{copy.hint}</p>
+    <div class="search-results">
+      {entries.map((entry) => (
+        <a
+          class="search-result"
+          href={entry.href}
+          data-search-item
+          data-search-text={entry.haystack}
+        >
+          <strong>{entry.title}</strong>
+          <span>{entry.meta}</span>
+        </a>
+      ))}
+      <p class="search-empty" data-search-empty hidden>{copy.empty}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    overflow-y: auto;
+    padding: 90px var(--gutter) 60px;
+    background: color-mix(in srgb, var(--paper) 97%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .search-close {
+    position: absolute;
+    top: 24px;
+    right: var(--gutter);
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+
+  .search-close:hover {
+    color: var(--ink);
+  }
+
+  .search-box {
+    width: min(760px, 100%);
+    margin: 0 auto;
+  }
+
+  input {
+    width: 100%;
+    margin: 22px 0 10px;
+    padding: 14px 0;
+    border: 0;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 40px);
+    outline: none;
+  }
+
+  input::placeholder {
+    color: var(--muted);
+  }
+
+  .search-hint {
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .search-result {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    transition: color 160ms ease, padding 160ms ease;
+  }
+
+  .search-result:hover {
+    padding-left: 8px;
+    color: var(--amber);
+  }
+
+  .search-result strong {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .search-result span {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .search-empty {
+    margin: 24px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  @media (max-width: 620px) {
+    .search-result {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Hero from '../../components/Hero.astro';
+import EntryBody from '../../components/EntryBody.astro';
+import SourceLedger from '../../components/SourceLedger.astro';
+import RelatedEntries from '../../components/RelatedEntries.astro';
+import {
+  entryHeroMeta,
+  getEntries,
+  getRelatedEntries,
+} from '../../lib/content';
+import { ui } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return getEntries().map((entry) => ({
+    params: { channel: entry.channelRoute, slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const related = getRelatedEntries(entry);
+const copy = ui('zh').labels;
+const credibility = copy.credibility[entry.credibility] || entry.credibility;
+---
+
+<SiteLayout
+  title={`${entry.titleZh} · ${entry.channelZh} · 稀奇奇`}
+  description={entry.summaryZh}
+  lang="zh"
+  langSwitchHref={entry.translationStatus === 'zh_only' ? '/en/' : entry.hrefEn}
+  randomChannel={entry.channel}
+>
+  <Hero
+    kicker={`${entry.channelZh} · ${entry.annotationZh}`}
+    meta={entryHeroMeta(entry, 'zh')}
+    title={entry.titleZh}
+    summary={entry.summaryZh}
+    image={entry.cover}
+    imageAlt={entry.titleZh}
+  />
+
+  <div class="entry-content">
+    <div class="entry-meta">
+      <span>稀奇奇编辑部</span>
+      <span>{entry.sourceCount} 条来源</span>
+      <span class={`credibility credibility--${entry.credibility}`}>{credibility}</span>
+    </div>
+
+    <EntryBody>
+      <Fragment set:html={entry.bodyHtmlZh} />
+    </EntryBody>
+
+    <SourceLedger sources={entry.sources} title={copy.sourceLedger} lang="zh" />
+
+    {related.length > 0 && <RelatedEntries entries={related} lang="zh" />}
+
+    <p class="license-note">
+      本文文字、原创地图与场景复原插图采用 CC BY-SA 4.0。场景复原插图不是历史照片。
+    </p>
+  </div>
+</SiteLayout>
+
+<style>
+  .entry-content {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 var(--gutter) 96px;
+  }
+
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 26px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .entry-meta > span + span::before {
+    content: "/";
+    margin-right: 16px;
+    color: var(--rust);
+  }
+
+  .credibility {
+    color: var(--amber);
+  }
+
+  .credibility::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    vertical-align: 1px;
+  }
+
+  .license-note {
+    margin: 36px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+  }
+</style>

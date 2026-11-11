@@ -1,0 +1,9 @@
+---
+interface Props {
+  size?: number;
+  alt?: string;
+}
+
+const { size = 38, alt = '' } = Astro.props;
+---
+<img src="/assets/rhino.svg" width={size} height={size} alt={alt} />
