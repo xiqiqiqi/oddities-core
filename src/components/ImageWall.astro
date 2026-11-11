@@ -16,9 +16,14 @@ const { items = [] } = Astro.props;
 ---
 
 <section class="wall" data-wall aria-label="档案图片墙">
-  {items.map((item) => (
+  {items.map((item, index) => (
     <a class={`wall-card wall-card--${item.ratio || 'wide'}`} href={item.href} data-wall-card>
-      <img src={item.image} alt={item.alt || ''} />
+      <img
+        src={item.image}
+        alt={item.alt || ''}
+        loading={index < 3 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
       <div class="wall-overlay">
         {item.meta && <div class="wall-meta">{item.meta}</div>}
         <h3>{item.title}</h3>

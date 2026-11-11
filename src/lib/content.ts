@@ -53,6 +53,7 @@ export interface Entry {
   sources: SourceItem[];
   sourceCount: number;
   cover: string;
+  coverThumb: string;
   related: string[];
   status: string;
   featured: boolean;
@@ -177,6 +178,9 @@ function loadAllEntries(): Entry[] {
       const summaryEn = String(en.data.summary || summaryZh);
       const bodyHtmlZh = toHtml(zh.body);
       const bodyHtmlEn = enRaw ? toHtml(en.body) : bodyHtmlZh;
+      const cover = String(meta.cover || '').replace('../../../assets/', '/content/');
+      const thumbName = path.basename(cover).replace(/\.[^.]+$/, '.webp');
+      const hasThumb = fs.existsSync(path.join(contentRoot, 'assets', 'thumbs', thumbName));
 
       entries.push({
         channel: channel.id,
@@ -202,7 +206,8 @@ function loadAllEntries(): Entry[] {
         credibility: String(meta.credibility || ''),
         sources: (meta.sources as SourceItem[]) || [],
         sourceCount: Array.isArray(meta.sources) ? meta.sources.length : 0,
-        cover: String(meta.cover || '').replace('../../../assets/', '/content/'),
+        cover,
+        coverThumb: hasThumb ? `/content/thumbs/${thumbName}` : cover,
         related: (meta.related as string[]) || [],
         status: String(meta.status || ''),
         featured: Boolean(meta.featured),

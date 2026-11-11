@@ -51,7 +51,7 @@ export function getHomepageData(lang: Lang): HomepageData | null {
   const ratios: WallItem['ratio'][] = ['wide', 'tall', 'square', 'portrait', 'wide'];
   const wallItems: WallItem[] = entries.map((entry, index) => ({
     href: lang === 'zh' ? entry.hrefZh : entry.hrefEn,
-    image: entry.cover,
+    image: entry.coverThumb,
     alt: lang === 'zh' ? entry.titleZh : entry.titleEn,
     meta: entryWallMeta(entry, lang),
     title: lang === 'zh' ? entry.titleZh : entry.titleEn,
