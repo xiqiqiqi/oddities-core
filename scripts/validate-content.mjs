@@ -97,6 +97,13 @@ for (const entry of entries) {
 
   const prefix = `${entry.channel}/${entry.slug}/entry.yml`;
 
+  const rawYaml = fs.readFileSync(entryPath, 'utf8');
+  for (const m of rawYaml.matchAll(/^\s+(?:publisher|title|usage|license|year):\s+([^"'\n][^\n]*)$/gm)) {
+    if (/\s#/.test(m[1])) {
+      warnings.push(`${prefix}: 值未加引号且含 " #"，YAML 会在此截断：${m[0].trim().slice(0, 70)}`);
+    }
+  }
+
   for (const field of requiredFields) {
     if (data[field] === undefined || data[field] === null || data[field] === '') {
       errors.push(`${prefix}: 缺少 ${field}`);

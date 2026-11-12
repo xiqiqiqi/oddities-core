@@ -8,33 +8,38 @@ interface Props {
 }
 
 const { sources = [], title = '来源台账', lang = 'zh' } = Astro.props;
-const headers = lang === 'zh'
-  ? ['编号', '来源', '作者 / 机构', '年份', '用途', '许可']
-  : ['ID', 'Source', 'Author / Institution', 'Year', 'Use', 'License'];
+const labels = lang === 'zh'
+  ? { pub: '作者 / 机构', use: '用途', lic: '许可', count: (n: number) => `共 ${n} 条 · 逐条列出` }
+  : { pub: 'Author / Institution', use: 'Use', lic: 'License', count: (n: number) => `${n} sources · listed in full` };
 ---
 
 <section class="source-ledger">
-  <h2>{title}</h2>
-  <div class="source-table-wrap">
-    <table class="source-table">
-      <thead>
-        <tr>
-          {headers.map((header) => <th>{header}</th>)}
-        </tr>
-      </thead>
-      <tbody>
-        {sources.map((source) => (
-          <tr>
-            <td class="source-id">{source.id}</td>
-            <td><a href={source.url} target="_blank" rel="noopener">{source.title}</a></td>
-            <td>{source.publisher}</td>
-            <td>{source.year}</td>
-            <td>{source.usage}</td>
-            <td>{source.license}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+  <div class="ledger-heading">
+    <h2>{title}</h2>
+    <p class="ledger-count">{labels.count(sources.length)}</p>
+  </div>
+  <div class="ledger-grid">
+    {sources.map((source) => (
+      <article class="ledger-item">
+        <div class="ledger-top">
+          <span class="ledger-id">{source.id}</span>
+          <span class="ledger-year">{source.year}</span>
+        </div>
+        <a class="ledger-title" href={source.url} target="_blank" rel="noopener">{source.title}</a>
+        <p class="ledger-field">
+          <span class="ledger-label">{labels.pub}</span>
+          {source.publisher}
+        </p>
+        <p class="ledger-field">
+          <span class="ledger-label">{labels.use}</span>
+          {source.usage}
+        </p>
+        <p class="ledger-lic">
+          <span class="ledger-label">{labels.lic}</span>
+          <span class="ledger-chip">{source.license}</span>
+        </p>
+      </article>
+    ))}
   </div>
 </section>
 
@@ -45,57 +50,139 @@ const headers = lang === 'zh'
     border-top: 2px solid var(--ink);
   }
 
+  .ledger-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 18px;
+    margin-bottom: 18px;
+  }
+
   h2 {
-    margin: 0 0 18px;
+    margin: 0;
     font-family: var(--serif);
     font-size: 26px;
   }
 
-  .source-table-wrap {
-    overflow-x: auto;
-  }
-
-  .source-table {
-    width: 100%;
-    min-width: 720px;
-    border-collapse: collapse;
-    font-family: var(--sans);
-    font-size: 11px;
-    line-height: 1.6;
-  }
-
-  th {
-    padding: 9px 8px;
-    border-bottom: 1px solid var(--ink);
+  .ledger-count {
+    margin: 0;
     color: var(--muted);
-    font-size: 9px;
-    font-weight: 600;
+    font-family: var(--mono);
+    font-size: 10px;
     letter-spacing: 0.08em;
-    text-align: left;
-    white-space: nowrap;
   }
 
-  td {
-    padding: 10px 8px;
-    border-bottom: 1px solid var(--line);
-    color: var(--ink-2);
-    vertical-align: top;
+  .ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+    gap: 14px;
   }
 
-  .source-id {
+  .ledger-item {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    padding: 14px 16px 16px;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--line-strong);
+    border-radius: 3px;
+    background: var(--paper-2);
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .ledger-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+    background: var(--paper-3);
+  }
+
+  .ledger-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .ledger-id {
     color: var(--rust);
     font-family: var(--mono);
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .ledger-year {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
     white-space: nowrap;
   }
 
-  a {
+  .ledger-title {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
     border-bottom: 1px solid var(--line-strong);
     transition: border-color 160ms ease, color 160ms ease;
   }
 
-  a:hover {
+  .ledger-title:hover {
     border-color: var(--amber);
     color: var(--amber);
+  }
+
+  .ledger-title:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  .ledger-field {
+    margin: 0;
+    color: var(--ink-2);
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+
+  .ledger-label {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+
+  .ledger-lic {
+    margin: auto 0 0;
+    padding-top: 2px;
+  }
+
+  .ledger-chip {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: var(--amber-soft);
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 480px) {
+    .ledger-grid {
+      gap: 10px;
+    }
+
+    .ledger-item {
+      padding: 12px 13px 14px;
+    }
   }
 </style>
