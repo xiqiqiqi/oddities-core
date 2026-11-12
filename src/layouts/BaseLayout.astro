@@ -139,27 +139,9 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
 
         if (input) input.addEventListener('input', function () { filterSearch(input.value); });
 
-        var sheet = document.querySelector('[data-channel-sheet]');
-
-        function toggleSheet(show) {
-          if (!sheet) return;
-          sheet.hidden = !show;
-          document.body.style.overflow = show ? 'hidden' : '';
-        }
-
-        document.addEventListener('click', function (event) {
-          var target = isElement(event.target) ? event.target.closest('[data-channel-sheet-open]') : null;
-          if (target) toggleSheet(true);
-        });
-
-        Array.prototype.forEach.call(document.querySelectorAll('[data-channel-sheet-close]'), function (button) {
-          button.addEventListener('click', function () { toggleSheet(false); });
-        });
-
         document.addEventListener('keydown', function (event) {
           if (event.key === 'Escape') {
             toggleSearch(false);
-            toggleSheet(false);
           }
         });
 

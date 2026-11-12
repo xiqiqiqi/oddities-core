@@ -23,7 +23,7 @@ const channels = getChannels();
 const channelMode = getSiteMode() === 'channel';
 const currentChannel = getSiteChannel();
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
-const portalLabel = lang === 'zh' ? '稀奇奇' : 'XIQIQI';
+const portalLabel = lang === 'zh' ? '无奇不有' : 'XIQIQI';
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
 const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
@@ -50,6 +50,15 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     </nav>
 
     <div class="masthead-actions">
+      <button class="icon-btn random-icon" type="button" data-random aria-label={randomLabel}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="16" height="16" rx="4"></rect>
+          <circle cx="9" cy="9" r="1.2" fill="currentColor" stroke="none"></circle>
+          <circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"></circle>
+          <circle cx="15" cy="9" r="1.2" fill="currentColor" stroke="none"></circle>
+          <circle cx="9" cy="15" r="1.2" fill="currentColor" stroke="none"></circle>
+        </svg>
+      </button>
       <button class="icon-btn" type="button" data-search-open aria-label={searchLabel}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <circle cx="11" cy="11" r="7"></circle>
@@ -190,6 +199,10 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     display: none;
   }
 
+  .random-icon {
+    display: none;
+  }
+
   @media (max-width: 920px) {
     .masthead {
       padding-top: env(safe-area-inset-top);
@@ -215,11 +228,20 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     .random-btn {
       display: none;
     }
+
+    .random-icon {
+      display: inline-flex;
+    }
   }
 
   @media (max-width: 580px) {
     .masthead-actions {
       gap: 6px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
     }
   }
 </style>
