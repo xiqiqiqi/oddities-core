@@ -196,6 +196,57 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
             navigator.serviceWorker.register('/sw.js').catch(function () {});
           });
         }
+
+        var progress = document.querySelector('[data-reading-progress]');
+
+        if (progress) {
+          var updateProgress = function () {
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            var value = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+            progress.style.transform = 'scaleX(' + value + ')';
+          };
+
+          window.addEventListener('scroll', updateProgress, { passive: true });
+          window.addEventListener('resize', updateProgress);
+          updateProgress();
+        }
+
+        var proseImages = document.querySelectorAll('.entry-prose img');
+
+        if (proseImages.length) {
+          var lightbox = document.createElement('div');
+          lightbox.className = 'image-lightbox';
+          lightbox.hidden = true;
+          lightbox.innerHTML = '<button type="button" class="image-lightbox-close">关闭 ✕</button><img alt="">';
+          document.body.appendChild(lightbox);
+
+          var lightboxImage = lightbox.querySelector('img');
+
+          function closeLightbox() {
+            lightbox.hidden = true;
+            document.body.style.overflow = '';
+          }
+
+          Array.prototype.forEach.call(proseImages, function (img) {
+            img.addEventListener('click', function () {
+              lightboxImage.src = img.currentSrc || img.src;
+              lightboxImage.alt = img.alt || '';
+              lightbox.hidden = false;
+              document.body.style.overflow = 'hidden';
+            });
+          });
+
+          lightbox.addEventListener('click', function (event) {
+            var target = event.target;
+            if (target === lightbox || (isElement(target) && target.classList.contains('image-lightbox-close'))) {
+              closeLightbox();
+            }
+          });
+
+          document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') closeLightbox();
+          });
+        }
       })();
     </script>
   </body>

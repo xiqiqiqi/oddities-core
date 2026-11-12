@@ -16,6 +16,7 @@ interface Props {
   langSwitchHref: string;
   randomChannel?: string;
   image?: string;
+  showProgress?: boolean;
 }
 
 const {
@@ -28,6 +29,7 @@ const {
   langSwitchHref,
   randomChannel,
   image,
+  showProgress = false,
 } = Astro.props;
 
 const site = getSiteInfo(lang);
@@ -65,6 +67,9 @@ const randomEntries = randomChannel
   image={image}
   alternateHref={langSwitchHref}
 >
+  {showProgress && (
+    <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+  )}
   <Masthead
     siteName={resolvedName}
     tagline={resolvedTagline}
@@ -82,3 +87,24 @@ const randomEntries = randomChannel
     {randomEntries.map((entry) => <a data-random-link href={entry.href}></a>)}
   </div>
 </BaseLayout>
+
+<style>
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    height: 2px;
+    pointer-events: none;
+  }
+
+  .reading-progress span {
+    display: block;
+    height: 100%;
+    background: var(--amber);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 80ms linear;
+  }
+</style>

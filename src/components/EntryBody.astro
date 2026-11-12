@@ -84,16 +84,24 @@ const { title, summary } = Astro.props;
     width: calc(100% + 64px);
     max-width: none;
     margin: 34px -32px 8px;
+    cursor: zoom-in;
   }
 
   .entry-prose :global(p > em:only-child) {
     display: block;
-    margin: 0 0 28px;
+    margin: 0 0 30px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
     color: var(--muted);
     font-family: var(--sans);
     font-size: 11px;
     font-style: normal;
-    line-height: 1.6;
+    line-height: 1.7;
+  }
+
+  .entry-prose :global(p > em:only-child)::before {
+    content: "— ";
+    color: var(--amber);
   }
 
   .entry-prose :global(blockquote) {

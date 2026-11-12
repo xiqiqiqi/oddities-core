@@ -34,6 +34,7 @@ const credibility = copy.credibility[entry.credibility] || entry.credibility;
   langSwitchHref={entry.translationStatus === 'zh_only' ? '/en/' : `/en/${entry.slug}/`}
   randomChannel={entry.channel}
   image={entry.cover}
+  showProgress
 >
   <Hero
     kicker={`${entry.channelZh} · ${entry.annotationZh}`}
