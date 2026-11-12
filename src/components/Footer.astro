@@ -1,5 +1,6 @@
 ---
 import { getChannelHref, getChannels } from '../lib/content';
+import { getSiteMode } from '../lib/site';
 import { ui } from '../lib/i18n';
 
 interface Props {
@@ -15,6 +16,8 @@ const {
 } = Astro.props;
 const copy = ui(lang).footer;
 const channels = getChannels();
+const channelMode = getSiteMode() === 'channel';
+const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
 const issuesUrl = `${repoUrl}/issues/new`;
 ---
@@ -32,6 +35,11 @@ const issuesUrl = `${repoUrl}/issues/new`;
       </div>
       <div class="footer-col">
         <h4>{copy.channels}</h4>
+        {channelMode && (
+          <a href={portalHref}>
+            {lang === 'zh' ? '稀奇奇 · 无奇不有' : 'XIQIQI · Nothing Is Too Strange'}
+          </a>
+        )}
         {channels.map((channel) => (
           <a href={getChannelHref(channel, lang)}>
             {lang === 'zh'

@@ -1,5 +1,6 @@
 ---
 import { getChannelHref, getChannels, getSiteInfo } from '../lib/content';
+import { getSiteMode } from '../lib/site';
 
 interface Props {
   lang?: 'zh' | 'en';
@@ -9,34 +10,37 @@ const { lang = 'zh' } = Astro.props;
 
 const site = getSiteInfo(lang);
 const channels = getChannels();
+const channelMode = getSiteMode() === 'channel';
 const homePath = lang === 'en' ? '/en/' : '/';
 const isHome = Astro.url.pathname === homePath;
+const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 
 const labels = lang === 'zh'
   ? {
       nav: '移动端导航',
       home: '首页',
+      mainSite: '主站',
       channels: '频道',
       random: '随机',
       search: '搜索',
       sheetKicker: 'CHANNELS / 频道',
       close: '关闭 ✕',
       current: '当前',
-      note: '五个频道各自独立成站，底部标签在任意页面都能用。',
+      note: '五个频道各自独立成站，点「稀奇奇」回主站。',
     }
   : {
       nav: 'Mobile navigation',
       home: 'Home',
+      mainSite: 'Main',
       channels: 'Channels',
       random: 'Random',
       search: 'Search',
       sheetKicker: 'CHANNELS',
       close: 'Close ✕',
       current: 'Current',
-      note: 'Each channel is its own site. The tab bar works on every page.',
+      note: 'Each channel is its own site. Tap XIQIQI to go back to the portal.',
     };
 
-const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 const items = [
   {
     id: 'portal',
@@ -56,21 +60,38 @@ const items = [
 ---
 
 <nav class="mobile-tabs" aria-label={labels.nav}>
-  <a class:list={['tab', isHome && 'is-active']} href={homePath} aria-current={isHome ? 'page' : undefined}>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"></path>
-    </svg>
-    <span>{labels.home}</span>
-  </a>
+  {channelMode ? (
+    <a class="tab" href={portalHref} aria-label={labels.mainSite}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="8"></circle>
+        <path d="M4 12h16"></path>
+        <path d="M12 4c2.6 2.4 2.6 13.6 0 16"></path>
+        <path d="M12 4c-2.6 2.4-2.6 13.6 0 16"></path>
+      </svg>
+      <span>{labels.mainSite}</span>
+    </a>
+  ) : (
+    <a class:list={['tab', isHome && 'is-active']} href={homePath} aria-current={isHome ? 'page' : undefined}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"></path>
+      </svg>
+      <span>{labels.home}</span>
+    </a>
+  )}
 
-  <button class:list={['tab', !isHome && 'is-active']} type="button" data-channel-sheet-open>
+  <button
+    class:list={['tab', (channelMode || !isHome) && 'is-active']}
+    type="button"
+    data-channel-sheet-open
+    aria-label={labels.channels}
+  >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
       <rect x="4" y="4" width="7" height="7" rx="1.4"></rect>
       <rect x="13" y="4" width="7" height="7" rx="1.4"></rect>
       <rect x="4" y="13" width="7" height="7" rx="1.4"></rect>
       <rect x="13" y="13" width="7" height="7" rx="1.4"></rect>
     </svg>
-    <span>{labels.channels}</span>
+    <span>{channelMode ? site.name : labels.channels}</span>
   </button>
 
   <button class="tab" type="button" data-random>
@@ -150,6 +171,7 @@ const items = [
       align-items: center;
       justify-content: center;
       gap: 3px;
+      min-width: 0;
       min-height: 50px;
       padding: 4px 2px;
       border: 0;
@@ -164,9 +186,17 @@ const items = [
       -webkit-tap-highlight-color: transparent;
     }
 
+    .tab span {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .tab svg {
       width: 21px;
       height: 21px;
+      flex: none;
     }
 
     .tab.is-active {

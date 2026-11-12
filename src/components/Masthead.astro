@@ -3,6 +3,7 @@ import Rhino from './Rhino.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
 import { getChannelHref, getChannels } from '../lib/content';
+import { getSiteChannel, getSiteMode } from '../lib/site';
 
 interface Props {
   siteName?: string;
@@ -19,6 +20,10 @@ const {
 } = Astro.props;
 
 const channels = getChannels();
+const channelMode = getSiteMode() === 'channel';
+const currentChannel = getSiteChannel();
+const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
+const portalLabel = lang === 'zh' ? '稀奇奇' : 'XIQIQI';
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
 const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
@@ -36,8 +41,9 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
     </a>
 
     <nav class="main-nav" aria-label={lang === 'zh' ? '频道导航' : 'Channel navigation'}>
+      {channelMode && <a class="main-nav-home" href={portalHref}>{portalLabel}</a>}
       {channels.map((channel) => (
-        <a href={getChannelHref(channel, lang)}>
+        <a class:list={[currentChannel === channel.id && 'is-current']} href={getChannelHref(channel, lang)}>
           {lang === 'zh' ? channel.zh : channel.en}
         </a>
       ))}
@@ -125,6 +131,11 @@ const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
   }
 
   .main-nav a:hover {
+    color: var(--amber);
+  }
+
+  .main-nav a.is-current,
+  .main-nav-home {
     color: var(--amber);
   }
 
