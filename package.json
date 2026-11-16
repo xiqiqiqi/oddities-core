@@ -12,7 +12,8 @@
     "dev": "node scripts/sync-assets.mjs && astro dev",
     "build": "node scripts/sync-assets.mjs && astro build",
     "preview": "astro preview",
-    "validate": "node scripts/validate-content.mjs"
+    "validate": "node scripts/validate-content.mjs",
+    "gate": "node scripts/quality-gate.mjs"
   },
   "dependencies": {
     "astro": "^4.16.0",

@@ -15,7 +15,7 @@ const channels = new Set(['mystery', 'tales', 'objects', 'places', 'creatures', 
 const types = new Set(['event', 'phenomenon', 'object', 'place', 'person', 'creature', 'story']);
 const credibilityLevels = new Set(['verified', 'disputed', 'folklore', 'hoax']);
 const statuses = new Set(['draft', 'review', 'published']);
-const translationStatuses = new Set(['zh_only', 'translated', 'reviewed']);
+const translationStatuses = new Set(['zh_only', 'translated', 'reviewed', 'line_edited', 'native_reviewed']);
 const requiredFields = [
   'channel',
   'type',
