@@ -103,6 +103,10 @@ for (const entry of listEntries()) {
   }
   if (!data.fact_ledger || !fs.existsSync(path.join(contentRoot, data.fact_ledger))) {
     errors.push(`${prefix}: fact_ledger 不存在`);
+  } else {
+    const ledger = fs.readFileSync(path.join(contentRoot, data.fact_ledger), 'utf8');
+    const mapped = (ledger.match(/^\| F\d{2} \|/gm) || []).length;
+    if (mapped < 5) errors.push(`${prefix}: 硬事实映射 ${mapped} 条，少于 5`);
   }
   if (!data.image_license_audit || !fs.existsSync(path.join(contentRoot, data.image_license_audit))) {
     errors.push(`${prefix}: image_license_audit 不存在`);
@@ -114,8 +118,8 @@ for (const entry of listEntries()) {
   const enWords = en.split(/\s+/).filter(Boolean).length;
   const enCjk = (en.match(/[\u4e00-\u9fa5]/g) || []).length;
 
-  if (zhChars < 1000) errors.push(`${prefix}: 中文 ${zhChars} 字，低于 1000`);
-  if (enWords < 650) errors.push(`${prefix}: 英文 ${enWords} 词，低于 650`);
+  if (zhChars < 1800 || zhChars > 3000) errors.push(`${prefix}: 中文 ${zhChars} 字，要求 1800–3000`);
+  if (enWords < 1000 || enWords > 1800) errors.push(`${prefix}: 英文 ${enWords} 词，要求 1000–1800`);
   if (enCjk > 10) errors.push(`${prefix}: 英文正文含 ${enCjk} 个中文字符`);
 
   const zhSections = (zh.match(/^## /gm) || []).length;

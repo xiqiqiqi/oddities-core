@@ -30,7 +30,7 @@ const {
 ---
 
 <section class="hero">
-  {image && <img class="hero-bg" src={image} alt={imageAlt} />}
+  {image && <img class="hero-bg" src={image} alt={imageAlt} fetchpriority="high" loading="eager" decoding="async" />}
   <div class="hero-shade"></div>
   <div class="container hero-inner">
     {kicker && <p class="kicker">{kicker}</p>}
