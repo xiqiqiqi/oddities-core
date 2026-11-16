@@ -28,6 +28,20 @@ const alternate = alternateHref ? new URL(alternateHref, base).href : null;
 const ogImage = image ? new URL(image, base).href : null;
 const alternateLang = lang === 'zh' ? 'en' : 'zh-CN';
 const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: canonical,
+  inLanguage: selfLang,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: siteName,
+    url: new URL('/', base).href,
+  },
+};
+const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 
 <!DOCTYPE html>
@@ -58,6 +72,7 @@ const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
     {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <script type="application/ld+json" set:html={schemaJson} />
     <script is:inline>
       (function () {
         try {
