@@ -48,8 +48,8 @@ function readFrontmatter(file) {
   const text = fs.readFileSync(file, 'utf8');
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) {
-    warnings.push(`${file}: 没有 frontmatter`);
-    return {};
+    // entry.yml is the canonical metadata source; body frontmatter is optional.
+    return null;
   }
   try {
     return yaml.load(match[1]) || {};

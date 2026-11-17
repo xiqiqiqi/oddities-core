@@ -80,10 +80,16 @@ const imageAuditSummaryPath = path.join(researchRoot, 'image-audit-summary.json'
 const imageAuditSummary = fs.existsSync(imageAuditSummaryPath)
   ? JSON.parse(fs.readFileSync(imageAuditSummaryPath, 'utf8'))
   : { total: 0, verified: 0 };
+const imageAuditCsvPath = path.join(researchRoot, 'image-audit.csv');
+const imageAuditRows = fs.existsSync(imageAuditCsvPath)
+  ? fs.readFileSync(imageAuditCsvPath, 'utf8').trim().split(/\r?\n/).slice(1).filter(Boolean).length
+  : 0;
 const imageAuditVerified = imageAuditSummary.verified || 0;
 const imageAuditTotal = imageAuditSummary.total || 0;
-if (imageAuditVerified !== 442 || imageAuditTotal !== 442) {
-  errors.push(`图片审计未闭环：${imageAuditVerified}/${imageAuditTotal}，要求 442/442`);
+if (imageAuditRows === 0) {
+  errors.push('图片审计 CSV 缺失或为空');
+} else if (imageAuditVerified !== imageAuditRows || imageAuditTotal !== imageAuditRows) {
+  errors.push(`图片审计未闭环：摘要 ${imageAuditVerified}/${imageAuditTotal}，CSV 实际 ${imageAuditRows} 行`);
 }
 
 for (const entry of listEntries()) {
