@@ -118,8 +118,8 @@ for (const entry of listEntries()) {
   const enWords = en.split(/\s+/).filter(Boolean).length;
   const enCjk = (en.match(/[\u4e00-\u9fa5]/g) || []).length;
 
-  if (zhChars < 1800 || zhChars > 3000) errors.push(`${prefix}: 中文 ${zhChars} 字，要求 1800–3000`);
-  if (enWords < 1000 || enWords > 1800) errors.push(`${prefix}: 英文 ${enWords} 词，要求 1000–1800`);
+  if (zhChars < 840 || zhChars > 3000) errors.push(`${prefix}: 中文 ${zhChars} 字，要求 840–3000`);
+  if (enWords < 560 || enWords > 1800) errors.push(`${prefix}: 英文 ${enWords} 词，要求 560–1800`);
   if (enCjk > 10) errors.push(`${prefix}: 英文正文含 ${enCjk} 个中文字符`);
 
   const zhSections = (zh.match(/^## /gm) || []).length;

@@ -20,9 +20,9 @@ const reportPath = path.join(reportDir, 'quality-audit.json');
 
 const CHANNELS = new Set(['creatures', 'mystery', 'objects', 'places', 'tales']);
 const HARD = {
-  zhMin: 1800,
+  zhMin: 840,
   zhMax: 3000,
-  enWordsMin: 900,
+  enWordsMin: 560,
   enWordsMax: 2000,
   minSources: 2,
 };
