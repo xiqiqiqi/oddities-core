@@ -20,6 +20,9 @@ const channelMode = getSiteMode() === 'channel';
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
 const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
+const netcnHref = 'https://netcn.org/';
+const netcnLabel = lang === 'zh' ? '蘑菇导航 · netcn.org' : 'Mushroom Nav · netcn.org';
+const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
 ---
 
 <footer class="site-footer">
@@ -51,6 +54,10 @@ const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
       <div class="footer-col">
         <h4>{copy.about}</h4>
         <a href={issuesUrl}>{copy.submit}</a>
+        <a class="footer-ext" href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>
+          <img src="/assets/netcn-mushroom.png" alt="" width="14" height="14" loading="lazy" decoding="async" />
+          <span>{netcnLabel}</span>
+        </a>
         <a href={repoUrl}>{copy.guidelines}</a>
         <a href={repoUrl}>{copy.credibility}</a>
       </div>
@@ -129,6 +136,18 @@ const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
 
   .footer-col a:hover {
     color: var(--amber);
+  }
+
+  .footer-ext {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-ext img {
+    display: block;
+    width: 14px;
+    height: 14px;
   }
 
   .footer-col p {
