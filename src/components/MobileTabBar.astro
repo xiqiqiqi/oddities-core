@@ -12,8 +12,10 @@ const channels = getChannels();
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 
 const labels = lang === 'zh'
-  ? { nav: '移动端导航', mainSite: '主站' }
-  : { nav: 'Mobile navigation', mainSite: 'Main' };
+  ? { nav: '移动端导航', mainSite: '主站', directory: '导航' }
+  : { nav: 'Mobile navigation', mainSite: 'Main', directory: 'Nav' };
+const directoryHref = 'https://netcn.org/';
+const directoryTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
 ---
 
 <nav class="mobile-tabs" aria-label={labels.nav}>
@@ -73,6 +75,16 @@ const labels = lang === 'zh'
       <span>{lang === 'zh' ? channel.zh : channel.en}</span>
     </a>
   ))}
+
+  <a class="tab" href={directoryHref} title={directoryTitle} aria-label={directoryTitle}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="4" width="6" height="6" rx="1.4"></rect>
+      <rect x="14" y="4" width="6" height="6" rx="1.4"></rect>
+      <rect x="4" y="14" width="6" height="6" rx="1.4"></rect>
+      <rect x="14" y="14" width="6" height="6" rx="1.4"></rect>
+    </svg>
+    <span>{labels.directory}</span>
+  </a>
 </nav>
 
 <style>
@@ -88,7 +100,7 @@ const labels = lang === 'zh'
       bottom: 0;
       z-index: 150;
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: 0;
       padding: 5px 4px calc(5px + env(safe-area-inset-bottom));
       border-top: 1px solid var(--line);

@@ -28,7 +28,7 @@ const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
 const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
 const netcnHref = 'https://netcn.org/';
-const netcnLabel = lang === 'zh' ? '蘑菇导航' : 'Mushroom Nav';
+const netcnLabel = lang === 'zh' ? '导航' : 'Nav';
 const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
 ---
 
@@ -51,7 +51,6 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
         </a>
       ))}
       <a class="main-nav-ext" href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>
-        <img src="/assets/netcn-mushroom.png" alt="" width="16" height="16" loading="lazy" decoding="async" />
         <span>{netcnLabel}</span>
       </a>
     </nav>
@@ -72,9 +71,6 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
           <path d="M16.5 16.5 L21 21"></path>
         </svg>
       </button>
-      <a class="icon-btn ext-icon-btn" href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>
-        <img src="/assets/netcn-mushroom.png" alt="" width="18" height="18" loading="lazy" decoding="async" />
-      </a>
       <ThemeToggle />
       <LangToggle lang={lang} href={langSwitchHref} />
       <button class="random-btn" type="button" data-random>
@@ -164,12 +160,6 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     gap: 6px;
   }
 
-  .main-nav-ext img {
-    display: block;
-    width: 16px;
-    height: 16px;
-  }
-
   .main-nav-ext:hover {
     color: var(--amber);
   }
@@ -229,23 +219,9 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     display: none;
   }
 
-  .ext-icon-btn {
-    display: none;
-  }
-
-  .ext-icon-btn img {
-    display: block;
-    width: 18px;
-    height: 18px;
-  }
-
   @media (max-width: 1050px) {
-    .main-nav-ext {
-      display: none;
-    }
-
-    .ext-icon-btn {
-      display: inline-flex;
+    .main-nav {
+      gap: 14px;
     }
   }
 
