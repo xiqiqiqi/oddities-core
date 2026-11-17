@@ -41,12 +41,6 @@ labels:
   languageNotice: 英文翻译正在整理，以下是中文原文。
 
 footer:
-  tagline: 稀奇不稀奇？无奇不有。
-  description: 收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。
-  explore: 探索
-  site: 站点
-  aboutSite: 关于本站
+  report: 报告问题
   legal: 法律与隐私
-  corrections: 报告问题
-  github: GitHub
-  license: 文字与原创插图 CC BY-SA 4.0 · 代码 MIT
+  nav: 导航

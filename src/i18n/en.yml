@@ -41,12 +41,6 @@ labels:
   languageNotice: The English translation is in progress. The Chinese original follows.
 
 footer:
-  tagline: Strange or not, nothing is too strange.
-  description: An open-source archive of odd events, stories, objects, places, and creatures from around the world.
-  explore: Explore
-  site: Site
-  aboutSite: About
+  report: Report an issue
   legal: Legal & privacy
-  corrections: Report an issue
-  github: GitHub
-  license: Text & original illustrations CC BY-SA 4.0 · Code MIT
+  nav: Nav
