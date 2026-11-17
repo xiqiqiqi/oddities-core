@@ -177,7 +177,7 @@ function loadAllEntries(): Entry[] {
       const summaryZh = String(zh.data.summary || '');
       const summaryEn = String(en.data.summary || summaryZh);
       const bodyHtmlZh = toHtml(zh.body);
-      const bodyHtmlEn = enRaw ? toHtml(en.body) : bodyHtmlZh;
+      const bodyHtmlEn = enRaw ? toHtml(en.body) : '';
       const cover = String(meta.cover || '').replace('../../../assets/', '/content/');
       const thumbName = path.basename(cover).replace(/\.[^.]+$/, '.webp');
       const hasThumb = fs.existsSync(path.join(contentRoot, 'assets', 'thumbs', thumbName));
@@ -253,7 +253,7 @@ export function getEntry(slug: string): Entry | undefined {
 export function getRelatedEntries(entry: Entry): Entry[] {
   const all = loadAllEntries();
   return entry.related
-    .map((slug) => all.find((item) => item.slug === slug))
+    .map((slug) => all.find((item) => item.slug === slug && item.channel === entry.channel))
     .filter((item): item is Entry => Boolean(item));
 }
 

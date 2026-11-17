@@ -227,7 +227,7 @@ export function legalContent(lang: InfoLang): InfoContent {
           title: 'Privacy policy',
           html: `
             <p>This is a static, public website. It has no user accounts, comments, newsletter, payment flow, advertising, or analytics/tracking script. It does not set cookies.</p>
-            <p><strong>Browser storage.</strong> The site stores two preferences in your browser's local storage: <code>xiqiqi-theme</code> (light or dark) and <code>xiqiqi-lang</code> (Chinese or English). They stay on your device, are not sent to us, and can be removed by clearing site data in your browser.</p>
+            <p><strong>Browser storage.</strong> The site stores one preference in your browser's local storage: <code>xiqiqi-theme</code> (light or dark). It stays on your device, is not sent to us, and can be removed by clearing site data in your browser.</p>
             <p><strong>Offline cache.</strong> A service worker may cache pages and images in your browser so the site can load with a weak connection. The cache is local and can be cleared through your browser settings.</p>
             <p><strong>Hosting.</strong> The site is served by GitHub Pages. GitHub may process technical data such as IP address, request time, user agent, and referring page for security, delivery, and operational purposes under the ${ext(githubPrivacyUrl, 'GitHub Privacy Statement')}. XIQIQI does not build visitor profiles from that data.</p>
             <p><strong>Issues and voluntary contact.</strong> Browsing the public issue tracker does not require a GitHub account. If you open or reply to an issue, GitHub will process your account and issue data, and the issue is public. Please do not include sensitive personal information. We use the issue only to review and respond to the report.</p>
@@ -333,7 +333,7 @@ export function legalContent(lang: InfoLang): InfoContent {
         title: '隐私政策',
         html: `
           <p>本站是静态公开网站，不设账号、评论、邮件订阅、支付流程、广告或统计分析脚本，也不设置 Cookie。</p>
-          <p><strong>浏览器本地存储。</strong>本站只在浏览器 local storage 中保存两个偏好：<code>xiqiqi-theme</code>（明暗主题）和 <code>xiqiqi-lang</code>（中英文）。它们留在你的设备上，不会传给我们；清除浏览器站点数据即可删除。</p>
+          <p><strong>浏览器本地存储。</strong>本站只在浏览器 local storage 中保存一项偏好：<code>xiqiqi-theme</code>（明暗主题）。它留在你的设备上，不会传给我们；清除浏览器站点数据即可删除。</p>
           <p><strong>离线缓存。</strong>Service Worker 可能把页面与图片缓存到你的浏览器，以便弱网时打开。缓存只存在本地，可通过浏览器设置清除。</p>
           <p><strong>托管服务。</strong>本站由 GitHub Pages 托管。GitHub 可能出于安全、分发与运维目的，按 ${ext(githubPrivacyUrl, 'GitHub 隐私声明')} 处理 IP 地址、请求时间、User-Agent、来源页面等技术数据。稀奇奇不据此建立访问者画像。</p>
           <p><strong>Issue 与主动联系。</strong>浏览公开 Issue 列表不需要 GitHub 账号；如果你新建或回复 Issue，GitHub 会处理你的账号与 Issue 数据，且 Issue 是公开的。请勿提交敏感个人信息。我们只把它用于复核与回应报告。</p>

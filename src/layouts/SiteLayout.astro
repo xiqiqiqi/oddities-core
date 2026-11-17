@@ -17,6 +17,9 @@ interface Props {
   randomChannel?: string;
   image?: string;
   showProgress?: boolean;
+  schemaType?: 'WebPage' | 'Article' | 'CollectionPage';
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
 }
 
 const {
@@ -30,6 +33,9 @@ const {
   randomChannel,
   image,
   showProgress = false,
+  schemaType = 'WebPage',
+  ogType = 'website',
+  noindex = false,
 } = Astro.props;
 
 const site = getSiteInfo(lang);
@@ -41,13 +47,15 @@ const searchEntries = entries.map((entry) => ({
   href: lang === 'zh' ? entry.hrefZh : entry.hrefEn,
   channel: entry.channel,
   title: lang === 'zh' ? entry.titleZh : entry.titleEn,
-  meta: `${lang === 'zh' ? entry.channelZh : entry.channelEn} · ${entry.era}`,
+  meta: `${lang === 'zh' ? entry.channelZh : entry.channelEn} · ${lang === 'zh' ? entry.era : entry.eraEn}`,
   haystack: [
     entry.titleZh,
     entry.titleEn,
     entry.summaryZh,
     entry.summaryEn,
     entry.tags.join(' '),
+    entry.era,
+    entry.eraEn,
     entry.region,
     entry.regionEn,
   ].join(' '),
@@ -66,6 +74,9 @@ const randomEntries = randomChannel
   siteName={resolvedName}
   image={image}
   alternateHref={langSwitchHref}
+  schemaType={schemaType}
+  ogType={ogType}
+  noindex={noindex}
 >
   {showProgress && (
     <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>

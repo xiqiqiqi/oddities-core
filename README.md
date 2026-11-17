@@ -61,7 +61,6 @@ node scripts/build.mjs \
 | `XIQIQI_SITE_CHANNEL` | 频道 id，如 `mystery` |
 | `XIQIQI_SITE_DOMAIN` | 自定义域名 |
 | `XIQIQI_SITE_URL` | `https://` + 域名 |
-| `XIQIQI_SITE_ACCENT` | 频道强调色 |
 | `XIQIQI_CONTENT_ROOT` | 内容仓绝对路径 |
 
 ## 构建链路

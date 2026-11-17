@@ -88,7 +88,7 @@ function writePwa(outDir, config) {
   const manifest = {
     name,
     short_name: config.name,
-    description: '收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。',
+    description: `${config.name} · ${config.tagline || '稀奇奇'}。收集全世界稀奇古怪的事件、故事、物品、遗迹与生物。A bilingual archive of strange events, stories, objects, places and creatures.`,
     lang: 'zh-CN',
     id: '/',
     start_url: '/',
@@ -187,7 +187,6 @@ const env = {
   XIQIQI_SITE_NAME: String(config.name || ''),
   XIQIQI_SITE_TAGLINE: String(config.tagline || ''),
   XIQIQI_SITE_DOMAIN: String(config.domain),
-  XIQIQI_SITE_ACCENT: String(config.accent || '#D99A2B'),
   XIQIQI_SITE_URL: siteUrl,
   XIQIQI_CONTENT_ROOT: contentRoot,
 };

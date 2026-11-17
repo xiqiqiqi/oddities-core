@@ -40,7 +40,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: var(--amber);
+  color: var(--amber-text);
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -74,18 +74,6 @@ button {
   border-color: var(--rust);
   background: var(--rust);
   color: var(--paper);
-}
-
-.lang-en {
-  display: none;
-}
-
-html[data-lang="en"] .lang-zh {
-  display: none;
-}
-
-html[data-lang="en"] .lang-en {
-  display: revert;
 }
 
 @media (max-width: 920px) {

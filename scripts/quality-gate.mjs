@@ -42,6 +42,10 @@ function sectionBodies(text) {
   });
 }
 
+function stripFrontmatter(text) {
+  return text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+}
+
 function similarity(a, b) {
   const aa = a.replace(/\s+/g, '');
   const bb = b.replace(/\s+/g, '');
@@ -120,20 +124,22 @@ for (const entry of listEntries()) {
 
   const zh = fs.readFileSync(path.join(entry.dir, 'zh.md'), 'utf8');
   const en = fs.readFileSync(path.join(entry.dir, 'en.md'), 'utf8');
-  const zhChars = (zh.match(/[\u4e00-\u9fa5]/g) || []).length;
-  const enWords = en.split(/\s+/).filter(Boolean).length;
-  const enCjk = (en.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const zhBody = stripFrontmatter(zh);
+  const enBody = stripFrontmatter(en);
+  const zhChars = (zhBody.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const enWords = enBody.split(/\s+/).filter(Boolean).length;
+  const enCjk = (enBody.match(/[\u4e00-\u9fa5]/g) || []).length;
 
   if (zhChars < 840 || zhChars > 3000) errors.push(`${prefix}: 中文 ${zhChars} 字，要求 840–3000`);
   if (enWords < 560 || enWords > 1800) errors.push(`${prefix}: 英文 ${enWords} 词，要求 560–1800`);
   if (enCjk > 10) errors.push(`${prefix}: 英文正文含 ${enCjk} 个中文字符`);
 
-  const zhSections = (zh.match(/^## /gm) || []).length;
-  const enSections = (en.match(/^## /gm) || []).length;
+  const zhSections = (zhBody.match(/^## /gm) || []).length;
+  const enSections = (enBody.match(/^## /gm) || []).length;
   if (zhSections !== enSections) errors.push(`${prefix}: 中英小节数不一致 ${zhSections}/${enSections}`);
 
-  const zhDup = duplicateSections(zh);
-  const enDup = duplicateSections(en);
+  const zhDup = duplicateSections(zhBody);
+  const enDup = duplicateSections(enBody);
   if (zhDup.length) errors.push(`${prefix}: 中文重复小节 ${JSON.stringify(zhDup.slice(0, 3))}`);
   if (enDup.length) errors.push(`${prefix}: 英文重复小节 ${JSON.stringify(enDup.slice(0, 3))}`);
 

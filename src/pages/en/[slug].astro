@@ -37,6 +37,8 @@ const credibility = copy.credibility[entry.credibility] || entry.credibility;
   randomChannel={entry.channel}
   image={entry.cover}
   showProgress
+  schemaType="Article"
+  ogType="article"
 >
   <Hero
     kicker={`${entry.channelEn} · ${entry.annotationEn}`}
@@ -94,7 +96,7 @@ const credibility = copy.credibility[entry.credibility] || entry.credibility;
   }
 
   .credibility {
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .credibility::before {

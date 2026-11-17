@@ -31,7 +31,14 @@ const copy = lang === 'zh'
     };
 ---
 
-<div class="search-overlay" data-search-overlay hidden>
+<div
+  class="search-overlay"
+  data-search-overlay
+  role="dialog"
+  aria-modal="true"
+  aria-label={lang === 'zh' ? '搜索档案' : 'Search the archive'}
+  hidden
+>
   <button class="search-close" type="button" data-search-close>{copy.close}</button>
   <div class="search-box">
     <label class="kicker" for="searchInput">{copy.kicker}</label>
@@ -55,7 +62,7 @@ const copy = lang === 'zh'
           <span>{entry.meta}</span>
         </a>
       ))}
-      <p class="search-empty" data-search-empty hidden>{copy.empty}</p>
+      <p class="search-empty" data-search-empty role="status" aria-live="polite" hidden>{copy.empty}</p>
     </div>
   </div>
 </div>
@@ -134,7 +141,7 @@ const copy = lang === 'zh'
 
   .search-result:hover {
     padding-left: 8px;
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .search-result strong {

@@ -34,6 +34,9 @@ const entries = [];
 function cjkCount(text) {
   return (text.match(/[\u4e00-\u9fa5]/g) || []).length;
 }
+function stripFrontmatter(text) {
+  return text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+}
 function sectionCount(text) {
   return (text.match(/^##\s+/gm) || []).length;
 }
@@ -72,13 +75,15 @@ for (const channel of [...CHANNELS]) {
     }
     const zh = fs.readFileSync(zhPath, 'utf8');
     const en = fs.readFileSync(enPath, 'utf8');
+    const zhBody = stripFrontmatter(zh);
+    const enBody = stripFrontmatter(en);
 
-    row.zhChars = cjkCount(zh);
-    row.zhSections = sectionCount(zh);
-    row.enSections = sectionCount(en);
-    row.enWords = wordCount(en);
-    row.enCJK = cjkCount(en);
-    row.sourceTail = hasSourceTail(en);
+    row.zhChars = cjkCount(zhBody);
+    row.zhSections = sectionCount(zhBody);
+    row.enSections = sectionCount(enBody);
+    row.enWords = wordCount(enBody);
+    row.enCJK = cjkCount(enBody);
+    row.sourceTail = hasSourceTail(enBody);
     row.status = data.status;
     row.translationStatus = data.translation_status;
     row.editorialStatus = data.editorial_status || null;
@@ -112,7 +117,7 @@ for (const channel of [...CHANNELS]) {
       warnings.push(`${channel}/${slug}: 英文词数 ${row.enWords} 超出建议区间 ${HARD.enWordsMin}-${HARD.enWordsMax}`);
     }
 
-    const imageRefs = [...en.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)].map((m) => m[1]);
+    const imageRefs = [...enBody.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)].map((m) => m[1]);
     row.images = imageRefs.length;
     for (const ref of imageRefs) {
       const target = ref.split('#')[0].split('?')[0];

@@ -76,8 +76,8 @@ const { title, summary } = Astro.props;
   }
 
   .entry-prose :global(a:hover) {
-    border-color: var(--amber);
-    color: var(--amber);
+    border-color: var(--amber-text);
+    color: var(--amber-text);
   }
 
   .entry-prose :global(img) {
@@ -101,7 +101,7 @@ const { title, summary } = Astro.props;
 
   .entry-prose :global(p > em:only-child)::before {
     content: "— ";
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .entry-prose :global(blockquote) {

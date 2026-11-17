@@ -10,6 +10,7 @@ const site = getSiteInfo('zh');
   description="你打开的页面不存在，可能已经改名或被移走。The page you requested does not exist."
   lang="zh"
   langSwitchHref="/en/"
+  noindex
 >
   <section class="lost">
     <p class="kicker">404 / LOST PAGE</p>
@@ -76,7 +77,7 @@ const site = getSiteInfo('zh');
   }
 
   .btn-primary {
-    border-color: var(--amber);
+    border-color: var(--amber-text);
     background: var(--amber);
     color: #1d1a17;
   }

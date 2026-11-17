@@ -30,7 +30,6 @@ const portalHref = siteMode === 'portal'
 const portalLabel = lang === 'zh' ? '无奇不有' : 'XIQIQI';
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
-const homeLabel = lang === 'zh' ? '稀奇奇首页' : 'XIQIQI home';
 const netcnHref = 'https://netcn.org/';
 const netcnLabel = lang === 'zh' ? '导航' : 'Nav';
 const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
@@ -38,7 +37,7 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
 
 <header class="masthead">
   <div class="container masthead-inner">
-    <a class="brand" href={lang === 'en' ? '/en/' : '/'} aria-label={homeLabel}>
+    <a class="brand" href={lang === 'en' ? '/en/' : '/'}>
       <Rhino size={38} />
       <span class="brand-copy">
         <span class="brand-cn">{siteName}</span>
@@ -124,7 +123,7 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   }
 
   .brand-tagline {
-    color: var(--amber);
+    color: var(--amber-text);
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.18em;
@@ -151,12 +150,12 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   }
 
   .main-nav a:hover {
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .main-nav a.is-current,
   .main-nav-home {
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .main-nav-ext {
@@ -166,7 +165,7 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   }
 
   .main-nav-ext:hover {
-    color: var(--amber);
+    color: var(--amber-text);
   }
 
   .masthead-actions {

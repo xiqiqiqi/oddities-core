@@ -28,7 +28,7 @@ const label = lang === 'zh' ? '档案图片墙' : 'Archive image wall';
       />
       <div class="wall-overlay">
         {item.meta && <div class="wall-meta">{item.meta}</div>}
-        <h3>{item.title}</h3>
+        <h2>{item.title}</h2>
       </div>
     </a>
   ))}
@@ -89,14 +89,14 @@ const label = lang === 'zh' ? '档案图片墙' : 'Archive image wall';
 
   .wall-meta {
     margin-bottom: 6px;
-    color: var(--amber);
+    color: var(--amber-text);
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
-  h3 {
+  h2 {
     margin: 0;
     color: var(--night-fg);
     font-family: var(--serif);

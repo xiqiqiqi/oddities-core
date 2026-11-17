@@ -13,6 +13,7 @@
   --line-strong: rgba(29, 26, 23, 0.3);
 
   --amber: #d99a2b;
+  --amber-text: #8a5a0e;
   --amber-soft: rgba(217, 154, 43, 0.16);
   --rust: #b44a32;
   --moss: #3e5548;
@@ -43,6 +44,7 @@ html[data-theme="dark"] {
   --line-strong: rgba(243, 238, 228, 0.3);
 
   --amber: #e0a63a;
+  --amber-text: #e0a63a;
   --amber-soft: rgba(224, 166, 58, 0.22);
   --rust: #d06a50;
   --moss: #5c7a68;

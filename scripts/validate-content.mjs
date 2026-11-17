@@ -80,6 +80,19 @@ function listEntries() {
 
 const entries = listEntries();
 const slugSet = new Set(entries.map((entry) => entry.slug));
+const slugOwners = new Map();
+
+for (const entry of entries) {
+  const owners = slugOwners.get(entry.slug) || [];
+  owners.push(entry.channel);
+  slugOwners.set(entry.slug, owners);
+}
+
+for (const [slug, owners] of slugOwners) {
+  if (owners.length > 1) {
+    errors.push(`slug 在多个频道重复：${slug} (${owners.join(', ')})`);
+  }
+}
 
 if (entries.length === 0) {
   errors.push(`${entriesRoot}: 没有找到条目`);
@@ -134,6 +147,11 @@ for (const entry of entries) {
 
   if (!Array.isArray(data.tags) || data.tags.length < 3 || data.tags.length > 8) {
     errors.push(`${prefix}: tags 需要 3–8 个`);
+  } else {
+    const tagSet = new Set(data.tags);
+    if (tagSet.size !== data.tags.length) {
+      errors.push(`${prefix}: tags 存在重复项`);
+    }
   }
 
   if (data.coords !== null && data.coords !== undefined) {
@@ -143,6 +161,13 @@ for (const entry of entries) {
       data.coords.some((value) => typeof value !== 'number')
     ) {
       errors.push(`${prefix}: coords 需要 [纬度, 经度] 或 null`);
+    } else if (
+      data.coords[0] < -90 ||
+      data.coords[0] > 90 ||
+      data.coords[1] < -180 ||
+      data.coords[1] > 180
+    ) {
+      errors.push(`${prefix}: coords 超出经纬度范围：${data.coords.join(', ')}`);
     }
   }
 
@@ -180,7 +205,9 @@ for (const entry of entries) {
     errors.push(`${entry.dir}: 缺少 zh.md`);
   } else {
     const frontmatter = readFrontmatter(zhPath);
-    if (frontmatter && (!frontmatter.title || !frontmatter.summary)) {
+    if (!frontmatter) {
+      errors.push(`${zhPath}: 缺少 frontmatter（需要 title、summary、lang）`);
+    } else if (!frontmatter.title || !frontmatter.summary) {
       errors.push(`${zhPath}: frontmatter 需要 title 和 summary`);
     }
   }
@@ -191,8 +218,14 @@ for (const entry of entries) {
 
   if (fs.existsSync(enPath)) {
     const frontmatter = readFrontmatter(enPath);
-    if (frontmatter && (!frontmatter.title || !frontmatter.summary)) {
+    if (!frontmatter) {
+      errors.push(`${enPath}: 缺少 frontmatter（需要 title、summary、lang）`);
+    } else if (!frontmatter.title || !frontmatter.summary) {
       errors.push(`${enPath}: frontmatter 需要 title 和 summary`);
+    }
+    const enBody = fs.readFileSync(enPath, 'utf8');
+    if (data.translation_status !== 'zh_only' && enBody.replace(/^---[\s\S]*?---/, '').trim().length === 0) {
+      errors.push(`${enPath}: 英文正文为空`);
     }
   }
 
