@@ -239,6 +239,16 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     height: 18px;
   }
 
+  @media (max-width: 1050px) {
+    .main-nav-ext {
+      display: none;
+    }
+
+    .ext-icon-btn {
+      display: inline-flex;
+    }
+  }
+
   @media (max-width: 920px) {
     .masthead {
       padding-top: env(safe-area-inset-top);
@@ -266,10 +276,6 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     }
 
     .random-icon {
-      display: inline-flex;
-    }
-
-    .ext-icon-btn {
       display: inline-flex;
     }
   }
