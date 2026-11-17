@@ -319,6 +319,14 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
           }
 
           Array.prototype.forEach.call(proseImages, function (img) {
+            img.tabIndex = 0;
+            img.setAttribute('role', 'button');
+            img.setAttribute('aria-haspopup', 'dialog');
+            img.setAttribute(
+              'aria-label',
+              (document.documentElement.lang === 'en' ? 'View larger image' : '查看大图') +
+                (img.alt ? ': ' + img.alt : '')
+            );
             img.addEventListener('click', function () {
               lightboxReturnFocus = document.activeElement;
               lightboxImage.src = img.currentSrc || img.src;
@@ -326,6 +334,12 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
               lightbox.hidden = false;
               document.body.style.overflow = 'hidden';
               if (lightboxClose) lightboxClose.focus();
+            });
+            img.addEventListener('keydown', function (event) {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                img.click();
+              }
             });
           });
 

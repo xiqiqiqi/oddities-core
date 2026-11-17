@@ -50,7 +50,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
           id: 'method',
           title: 'How the entries are made',
           html: `
-            <p>Each entry is built around a fact ledger and a source ledger. Sources are listed with publisher, year, intended use, and licence, so a reader can follow the trail rather than take our word for it.</p>
+            <p>Each entry is built around a fact ledger and a source ledger. Sources are listed with publisher, year and licence; where an English use note is available, it is also shown, so a reader can follow the trail rather than take our word for it.</p>
             <ul>
               <li><strong>Credibility labels:</strong> Verified, Disputed, Folklore, and Hoax describe the present state of the evidence, not a final verdict on the subject.</li>
               <li><strong>Reconstruction images:</strong> covers and diagrams may be AI-assisted reconstructions. They are illustrations, not historical photographs.</li>
@@ -127,7 +127,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
         id: 'method',
         title: '内容是怎么做出来的',
         html: `
-          <p>每条档案都围绕一份事实台账和一份来源台账展开。来源会列出作者或机构、年份、用途与许可，读者可以顺着线索自己核对，而不是只相信我们的结论。</p>
+          <p>每条档案都围绕一份事实台账和一份来源台账展开。来源会列出作者或机构、年份与许可；用途说明按语言显示，读者可以顺着线索自己核对，而不是只相信我们的结论。</p>
           <ul>
             <li><strong>可信度分级：</strong>已核实、争议、传说、骗局描述的是当前证据状态，不是对题材的最终判决。</li>
             <li><strong>场景复原图：</strong>封面与示意图可能是 AI 辅助复原，是插图，不是历史照片。</li>
