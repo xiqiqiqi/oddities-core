@@ -10,12 +10,14 @@ interface WallItem {
 
 interface Props {
   items: WallItem[];
+  lang?: 'zh' | 'en';
 }
 
-const { items = [] } = Astro.props;
+const { items = [], lang = 'zh' } = Astro.props;
+const label = lang === 'zh' ? '档案图片墙' : 'Archive image wall';
 ---
 
-<section class="wall" data-wall aria-label="档案图片墙">
+<section class="wall" data-wall aria-label={label}>
   {items.map((item, index) => (
     <a class={`wall-card wall-card--${item.ratio || 'wide'}`} href={item.href} data-wall-card>
       <img

@@ -1,0 +1,244 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import type { InfoSection } from '../lib/info';
+
+interface Props {
+  title: string;
+  heading: string;
+  description: string;
+  kicker: string;
+  intro: string;
+  updated: string;
+  tocTitle: string;
+  sections: InfoSection[];
+  lang: 'zh' | 'en';
+  langSwitchHref: string;
+}
+
+const {
+  title,
+  heading,
+  description,
+  kicker,
+  intro,
+  updated,
+  tocTitle,
+  sections,
+  lang,
+  langSwitchHref,
+} = Astro.props;
+---
+
+<SiteLayout
+  title={title}
+  description={description}
+  lang={lang}
+  langSwitchHref={langSwitchHref}
+>
+  <header class="info-head">
+    <div class="container">
+      <p class="kicker">{kicker}</p>
+      <h1>{heading}</h1>
+      <p class="info-intro">{intro}</p>
+      <p class="info-updated">{updated}</p>
+    </div>
+  </header>
+
+  <div class="container info-wrap">
+    <aside class="info-toc" aria-label={tocTitle}>
+      <p class="toc-title">{tocTitle}</p>
+      {sections.map((section) => (
+        <a href={`#${section.id}`}>{section.title}</a>
+      ))}
+    </aside>
+
+    <article class="info-body">
+      {sections.map((section) => (
+        <section class="info-section" id={section.id}>
+          <h2>{section.title}</h2>
+          <div class="info-prose" set:html={section.html} />
+        </section>
+      ))}
+    </article>
+  </div>
+</SiteLayout>
+
+<style>
+  .info-head {
+    padding: 104px 0 56px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .info-head h1 {
+    max-width: 900px;
+    margin: 16px 0 20px;
+    font-family: var(--serif);
+    font-size: clamp(44px, 7vw, 92px);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .info-intro {
+    max-width: 720px;
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: clamp(17px, 2vw, 21px);
+    line-height: 1.9;
+  }
+
+  .info-updated {
+    margin: 22px 0 0;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .info-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 760px);
+    gap: 64px;
+    align-items: start;
+    padding-top: 56px;
+    padding-bottom: 96px;
+  }
+
+  .info-toc {
+    position: sticky;
+    top: 104px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .toc-title {
+    margin: 0 0 6px;
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .info-toc a {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    transition: color 160ms ease;
+  }
+
+  .info-toc a:hover {
+    color: var(--amber);
+  }
+
+  .info-body {
+    min-width: 0;
+  }
+
+  .info-section {
+    scroll-margin-top: 100px;
+    padding-bottom: 34px;
+    margin-bottom: 34px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .info-section:last-child {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .info-section h2 {
+    margin: 0 0 18px;
+    font-family: var(--serif);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .info-prose {
+    color: var(--ink-2);
+    font-family: var(--serif);
+    font-size: 16.5px;
+    line-height: 1.95;
+  }
+
+  .info-prose :global(p) {
+    margin: 0 0 18px;
+  }
+
+  .info-prose :global(ul) {
+    margin: 0 0 20px;
+    padding-left: 1.3em;
+  }
+
+  .info-prose :global(li) {
+    margin: 0 0 10px;
+  }
+
+  .info-prose :global(a) {
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 160ms ease, color 160ms ease;
+  }
+
+  .info-prose :global(a:hover) {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  .info-prose :global(code) {
+    padding: 2px 5px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: var(--paper-2);
+    font-family: var(--mono);
+    font-size: 0.86em;
+    overflow-wrap: anywhere;
+  }
+
+  .info-prose :global(strong) {
+    color: var(--ink);
+  }
+
+  @media (max-width: 980px) {
+    .info-wrap {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .info-toc {
+      position: static;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 18px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toc-title {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .info-head {
+      padding-top: 72px;
+    }
+
+    .info-wrap {
+      padding-top: 40px;
+      padding-bottom: 72px;
+    }
+
+    .info-toc {
+      grid-template-columns: 1fr;
+    }
+
+    .info-prose {
+      font-size: 16px;
+    }
+  }
+</style>

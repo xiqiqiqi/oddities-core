@@ -21,8 +21,8 @@ src/
   layouts/       # BaseLayout、SiteLayout
   i18n/          # zh.yml / en.yml
   styles/        # tokens.css、base.css
-  pages/         # 首页、条目页（频道站）、英文路由、404
-  lib/           # content.ts、site.ts、home.ts
+  pages/         # 首页、条目页（频道站）、英文路由、关于、法律与隐私、404
+  lib/           # content.ts、home.ts、site.ts、info.ts（关于/法律文案）
 scripts/
   build.mjs              # 读取 site.config.ts 并构建单个站点
   sync-assets.mjs        # 把内容仓图片同步到 public/content

@@ -1,0 +1,19 @@
+---
+import InfoPage from '../../components/InfoPage.astro';
+import { aboutContent } from '../../lib/info';
+
+const content = aboutContent('en');
+---
+
+<InfoPage
+  title="About · XIQIQI"
+  heading={content.title}
+  description={content.description}
+  kicker={content.kicker}
+  intro={content.intro}
+  updated={content.updated}
+  tocTitle={content.tocTitle}
+  sections={content.sections}
+  lang="en"
+  langSwitchHref="/about/"
+/>

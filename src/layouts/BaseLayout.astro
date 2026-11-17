@@ -28,6 +28,9 @@ const alternate = alternateHref ? new URL(alternateHref, base).href : null;
 const ogImage = image ? new URL(image, base).href : null;
 const alternateLang = lang === 'zh' ? 'en' : 'zh-CN';
 const selfLang = lang === 'zh' ? 'zh-CN' : 'en';
+const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
+const ogLocaleAlternate = lang === 'zh' ? 'en_US' : 'zh_CN';
+const licenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
@@ -54,6 +57,7 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
     <link rel="canonical" href={canonical} />
     {alternate && <link rel="alternate" hreflang={alternateLang} href={alternate} />}
     <link rel="alternate" hreflang={selfLang} href={canonical} />
+    <link rel="license" href={licenseUrl} />
     <link rel="icon" href="/assets/rhino.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
@@ -63,6 +67,8 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
     <meta name="apple-mobile-web-app-title" content={siteName} />
     <meta name="theme-color" content={theme === 'dark' ? '#12100E' : '#F3EEE4'} />
     <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={canonical} />
@@ -233,7 +239,10 @@ const schemaJson = JSON.stringify(schema).replace(/</g, '\\u003c');
           var lightbox = document.createElement('div');
           lightbox.className = 'image-lightbox';
           lightbox.hidden = true;
-          lightbox.innerHTML = '<button type="button" class="image-lightbox-close">关闭 ✕</button><img alt="">';
+          lightbox.setAttribute('role', 'dialog');
+          lightbox.setAttribute('aria-modal', 'true');
+          var closeLabel = document.documentElement.lang === 'en' ? 'Close ✕' : '关闭 ✕';
+          lightbox.innerHTML = '<button type="button" class="image-lightbox-close" aria-label="' + closeLabel + '">' + closeLabel + '</button><img alt="">';
           document.body.appendChild(lightbox);
 
           var lightboxImage = lightbox.querySelector('img');

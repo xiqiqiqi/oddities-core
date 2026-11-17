@@ -18,59 +18,59 @@ const copy = ui(lang).footer;
 const channels = getChannels();
 const channelMode = getSiteMode() === 'channel';
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
+const aboutHref = lang === 'en' ? '/en/about/' : '/about/';
+const legalHref = lang === 'en' ? '/en/legal/' : '/legal/';
 const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
 const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
 const netcnHref = 'https://netcn.org/';
-const netcnLabel = lang === 'zh' ? '蘑菇导航 · netcn.org' : 'Mushroom Nav · netcn.org';
+const netcnLabel = lang === 'zh' ? '导航 · netcn.org' : 'Nav · netcn.org';
 const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
 ---
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-grid">
+    <div class="footer-main">
       <div class="footer-brand">
         <img src="/assets/rhino.svg" alt="" width="44" height="44" />
         <div>
           <h3>{siteName}</h3>
           <p class="footer-tagline">{siteTagline || copy.tagline}</p>
           <p>{copy.description}</p>
+          <a class="footer-ext" href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>
+            <span>{netcnLabel}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
-      <div class="footer-col">
-        <h4>{copy.channels}</h4>
-        {channelMode && (
-          <a href={portalHref}>
-            {lang === 'zh' ? '稀奇奇 · 无奇不有' : 'XIQIQI · Nothing Is Too Strange'}
-          </a>
-        )}
-        {channels.map((channel) => (
-          <a href={getChannelHref(channel, lang)}>
-            {lang === 'zh'
-              ? `${channel.zh} · ${channel.annotationZh}`
-              : `${channel.en} · ${channel.annotationEn}`}
-          </a>
-        ))}
-      </div>
-      <div class="footer-col">
-        <h4>{copy.about}</h4>
-        <a href={issuesUrl}>{copy.submit}</a>
-        <a class="footer-ext" href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>
-          <img src="/assets/netcn-mushroom.png" alt="" width="14" height="14" loading="lazy" decoding="async" />
-          <span>{netcnLabel}</span>
-        </a>
-        <a href={repoUrl}>{copy.guidelines}</a>
-        <a href={repoUrl}>{copy.credibility}</a>
-      </div>
-      <div class="footer-col">
-        <h4>{copy.openSource}</h4>
-        <a href={repoUrl}>{copy.contentRepo}</a>
-        <p>{copy.contentLicense}</p>
-        <p>{copy.imageLicense}</p>
+
+      <div class="footer-nav">
+        <div class="footer-group">
+          <h4>{copy.explore}</h4>
+          <div class="footer-links">
+            {channelMode && <a href={portalHref}>{lang === 'zh' ? '稀奇奇' : 'XIQIQI'}</a>}
+            {channels.map((channel) => (
+              <a href={getChannelHref(channel, lang)}>
+                {lang === 'zh' ? channel.zh : channel.en}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="footer-group">
+          <h4>{copy.site}</h4>
+          <div class="footer-links">
+            <a href={aboutHref}>{copy.aboutSite}</a>
+            <a href={legalHref}>{copy.legal}</a>
+            <a href={issuesUrl}>{copy.corrections}</a>
+            <a href={repoUrl}>{copy.github}</a>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="footer-bottom">
-      <span>© 2026 XIQIQI</span>
-      <span>MADE FOR THE CURIOUS</span>
+      <p>{copy.license}</p>
+      <p>© 2026 XIQIQI · MADE FOR THE CURIOUS</p>
     </div>
   </div>
 </footer>
@@ -82,10 +82,11 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     color: var(--night-fg);
   }
 
-  .footer-grid {
+  .footer-main {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-    gap: 40px;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
   }
 
   .footer-brand {
@@ -107,82 +108,95 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   }
 
   .footer-brand p {
-    max-width: 300px;
-    margin: 0 0 8px;
+    max-width: 440px;
+    margin: 0 0 10px;
     color: rgba(243, 238, 228, 0.64);
     font-size: 12px;
     line-height: 1.8;
-  }
-
-  .footer-col {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .footer-col h4 {
-    margin: 0 0 6px;
-    color: var(--amber);
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.12em;
-  }
-
-  .footer-col a {
-    color: rgba(243, 238, 228, 0.72);
-    font-size: 12px;
-    transition: color 160ms ease;
-  }
-
-  .footer-col a:hover {
-    color: var(--amber);
   }
 
   .footer-ext {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    color: rgba(243, 238, 228, 0.58);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    transition: color 160ms ease;
   }
 
-  .footer-ext img {
-    display: block;
-    width: 14px;
-    height: 14px;
+  .footer-ext:hover {
+    color: var(--amber);
   }
 
-  .footer-col p {
-    margin: 0;
-    color: rgba(243, 238, 228, 0.56);
-    font-size: 11px;
+  .footer-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 28px;
+  }
+
+  .footer-group {
+    min-width: 0;
+  }
+
+  .footer-group h4 {
+    margin: 0 0 10px;
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .footer-links a {
+    color: rgba(243, 238, 228, 0.72);
+    font-size: 12px;
     line-height: 1.7;
+    transition: color 160ms ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--amber);
   }
 
   .footer-bottom {
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    margin-top: 48px;
+    margin-top: 44px;
     padding-top: 20px;
     border-top: 1px solid rgba(243, 238, 228, 0.16);
     color: rgba(243, 238, 228, 0.42);
     font-family: var(--mono);
     font-size: 9px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-bottom p {
+    margin: 0;
   }
 
   @media (max-width: 860px) {
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
+    .footer-main {
+      grid-template-columns: 1fr;
+      gap: 36px;
     }
 
-    .footer-brand {
-      grid-column: 1 / -1;
+    .footer-nav {
+      grid-template-columns: 1fr 1fr;
     }
   }
 
   @media (max-width: 520px) {
-    .footer-grid {
+    .footer-nav {
       grid-template-columns: 1fr;
+      gap: 20px;
     }
 
     .footer-bottom {

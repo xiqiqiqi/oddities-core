@@ -6,20 +6,24 @@ const site = getSiteInfo('zh');
 ---
 
 <SiteLayout
-  title={`这一页不见了 · ${site.name}`}
-  description="你打开的页面不存在，可能已经改名或被移走。"
+  title={`这一页不见了 / Page not found · ${site.name}`}
+  description="你打开的页面不存在，可能已经改名或被移走。The page you requested does not exist."
   lang="zh"
   langSwitchHref="/en/"
 >
   <section class="lost">
     <p class="kicker">404 / LOST PAGE</p>
-    <h1>这一页不见了。</h1>
+    <h1>这一页不见了。<span>This page is missing.</span></h1>
     <p class="lost-copy">
       你打开的地址没有对应的档案。可能它换了名字，也可能只是犀牛翻页时抖落了一角。
     </p>
+    <p class="lost-copy lost-copy--en">
+      There is no entry at this address. It may have been renamed, or the rhino may have dropped a corner while turning the page.
+    </p>
     <div class="lost-actions">
       <a class="btn-primary" href="/">回首页 ↗</a>
-      <a class="lost-link" href="/en/">English →</a>
+      <a class="lost-link" href="/en/">English home →</a>
+      <a class="lost-link" href="/legal/">关于与法律</a>
     </div>
   </section>
 </SiteLayout>
@@ -41,18 +45,33 @@ const site = getSiteInfo('zh');
     letter-spacing: -0.04em;
   }
 
+  .lost h1 span {
+    display: block;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
   .lost-copy {
-    max-width: 520px;
+    max-width: 560px;
+    margin: 0 0 12px;
     color: var(--muted);
     font-family: var(--serif);
     font-size: 17px;
     line-height: 1.9;
   }
 
+  .lost-copy--en {
+    font-size: 15px;
+  }
+
   .lost-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
     margin-top: 32px;
   }
 
