@@ -3,30 +3,34 @@ import { ui } from '../lib/i18n';
 
 interface Props {
   lang?: 'zh' | 'en';
-  siteName?: string;
 }
 
-const { lang = 'zh', siteName = '稀奇奇' } = Astro.props;
+const { lang = 'zh' } = Astro.props;
 const copy = ui(lang).footer;
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 const legalHref = lang === 'en' ? '/en/legal/' : '/legal/';
 const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
-const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
-const netcnHref = 'https://netcn.org/';
-const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · Simple web directory';
+const issuesUrl = `${repoUrl}/issues`;
+const licenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
+const year = new Date().getFullYear();
+const licenseTitle = lang === 'zh'
+  ? '文字与原创插图采用 CC BY-SA 4.0；代码采用 MIT'
+  : 'Text and original illustrations under CC BY-SA 4.0; code under MIT';
 ---
 
 <footer class="site-footer">
   <div class="container footer-line">
-    <p class="footer-site">
-      {siteName} · <a href={portalHref}>xiqiqi.com</a>
+    <p class="footer-meta">
+      <a href={portalHref}>xiqiqi.com</a>
+      <span aria-hidden="true">·</span>
+      <span>{year}</span>
+      <span aria-hidden="true">·</span>
+      <a href={licenseUrl} target="_blank" rel="license noopener" title={licenseTitle}>CC BY-SA 4.0</a>
     </p>
     <nav class="footer-links" aria-label={lang === 'zh' ? '页脚导航' : 'Footer navigation'}>
       <a href={issuesUrl}>{copy.report}</a>
       <span aria-hidden="true">·</span>
       <a href={legalHref}>{copy.legal}</a>
-      <span aria-hidden="true">·</span>
-      <a href={netcnHref} title={netcnTitle} aria-label={netcnTitle}>{copy.nav}</a>
     </nav>
   </div>
 </footer>
@@ -42,12 +46,16 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px 18px;
+    gap: 8px 18px;
     flex-wrap: wrap;
   }
 
-  .footer-site,
+  .footer-meta,
   .footer-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px 9px;
     margin: 0;
     font-family: var(--mono);
     font-size: 10px;
@@ -55,34 +63,23 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     line-height: 1.6;
   }
 
-  .footer-site {
+  .footer-meta {
     color: rgba(243, 238, 228, 0.46);
   }
 
-  .footer-site a {
-    color: rgba(243, 238, 228, 0.58);
-    transition: color 160ms ease;
-  }
-
-  .footer-site a:hover {
-    color: var(--amber);
-  }
-
-  .footer-links {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 3px 9px;
-    color: rgba(243, 238, 228, 0.32);
-  }
-
+  .footer-meta a,
   .footer-links a {
     color: rgba(243, 238, 228, 0.58);
     transition: color 160ms ease;
   }
 
+  .footer-meta a:hover,
   .footer-links a:hover {
     color: var(--amber);
+  }
+
+  .footer-links {
+    color: rgba(243, 238, 228, 0.32);
   }
 
   @media (max-width: 520px) {
@@ -92,7 +89,7 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
 
     .footer-line {
       justify-content: flex-start;
-      gap: 4px 12px;
+      gap: 4px 14px;
     }
   }
 </style>

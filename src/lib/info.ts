@@ -17,7 +17,7 @@ export interface InfoContent {
 }
 
 const repoUrl = 'https://github.com/xiqiqiqi/oddities-and-mysteries';
-const issuesUrl = `${repoUrl}/issues/new?template=correction.md`;
+const issuesUrl = `${repoUrl}/issues`;
 const licenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
 const mitUrl = 'https://github.com/xiqiqiqi/oddities-core/blob/main/LICENSE';
 const githubPrivacyUrl = 'https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement';
@@ -65,7 +65,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
           html: `
             <p>XIQIQI currently has no human final-review step. Entries are drafted, translated, checked, and given a final editorial pass by an AI editorial workflow. We disclose that plainly and do not present the archive as human-reviewed.</p>
             <p>AI can make mistakes: a date can be wrong, a source can be misread, a translation can flatten a nuance, and an image can imply more certainty than the record supports. That is exactly why the source ledger and the correction route are part of the product, not an appendix.</p>
-            <p>If an entry matters to a decision, check the primary sources yourself. If something is wrong, report it through the issue template so the correction is visible to everyone.</p>
+            <p>If an entry matters to a decision, check the primary sources yourself. If something is wrong, report it in the public issue tracker so the correction is visible to everyone.</p>
           `,
         },
         {
@@ -81,7 +81,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
           id: 'corrections',
           title: 'Corrections',
           html: `
-            <p>All corrections go through the <a href="${issuesUrl}" target="_blank" rel="noopener">correction issue template</a>. Please include the page URL, the passage that is wrong, and a source that supports the correction. Public issues keep the reasoning visible and let other readers follow up.</p>
+            <p>All corrections go through the <a href="${issuesUrl}" target="_blank" rel="noopener">public issue tracker</a>. Please include the page URL, the passage that is wrong, and a source that supports the correction. Public issues keep the reasoning visible and let other readers follow up.</p>
             <p>There is no fixed waiting period before a correction is considered. We review reports as soon as they can be verified and update the entry, the ledger, or both. If a report cannot be verified, the entry stays as it is until better material appears.</p>
           `,
         },
@@ -98,7 +98,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
           id: 'contact',
           title: 'Contact',
           html: `
-            <p>The archive has no support inbox or phone line. The public issue tracker is the contact route for corrections, rights requests, and editorial questions: ${ext(issuesUrl, 'open a correction issue')}.</p>
+            <p>The archive has no support inbox or phone line. The public issue tracker is the contact route for corrections, rights requests, and editorial questions: ${ext(issuesUrl, 'browse the issue tracker')}.</p>
             <p>For privacy, licensing, and liability details, see the <a href="/en/legal/">legal and privacy page</a>.</p>
           `,
         },
@@ -142,7 +142,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
         html: `
           <p>稀奇奇目前不设人工终审环节，条目由 AI 编辑流程完成撰写、翻译、核查与最终编辑。我们明确披露这一点，不把内容包装成人工审核的成果。</p>
           <p>AI 会出错：年代可能写错，来源可能读偏，翻译可能磨平语气，图像可能暗示出比史料更强的确定性。这正是来源台账和更正入口必须成为产品一部分，而不是附录的原因。</p>
-          <p>如果一条档案会影响你的实际判断，请自己核对一次原始来源。如果发现错误，请通过 Issue 模板报告，让更正过程公开可见。</p>
+          <p>如果一条档案会影响你的实际判断，请自己核对一次原始来源。如果发现错误，请通过公开 Issue 报告，让更正过程公开可见。</p>
         `,
       },
       {
@@ -158,7 +158,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
         id: 'corrections',
         title: '更正机制',
         html: `
-          <p>所有更正统一走 <a href="${issuesUrl}" target="_blank" rel="noopener">内容仓的更正 Issue 模板</a>。请附上页面地址、错误段落，以及支持更正的来源。公开 Issue 能让推理过程可见，也方便其他读者跟进。</p>
+          <p>所有更正统一走 <a href="${issuesUrl}" target="_blank" rel="noopener">内容仓的公开 Issue</a>。请附上页面地址、错误段落，以及支持更正的来源。公开 Issue 能让推理过程可见，也方便其他读者跟进。</p>
           <p>我们不为更正设置固定等待期。收到可以核验的报告后，会尽快复核并更新条目或台账；如果报告无法核验，条目会保持原样，直到出现更好的材料。</p>
         `,
       },
@@ -175,7 +175,7 @@ export function aboutContent(lang: InfoLang): InfoContent {
         id: 'contact',
         title: '联系',
         html: `
-          <p>本站没有客服邮箱或电话。公开 Issue 是更正、权利请求与编辑问题的统一联系入口：${ext(issuesUrl, '提交更正 Issue')}。</p>
+          <p>本站没有客服邮箱或电话。公开 Issue 是更正、权利请求与编辑问题的统一联系入口：${ext(issuesUrl, '查看公开 Issue')}。</p>
           <p>隐私、许可与责任条款见 <a href="/legal/">法律与隐私页面</a>。</p>
         `,
       },
@@ -219,7 +219,7 @@ export function legalContent(lang: InfoLang): InfoContent {
           html: `
             <p>“Verified” means that reliable sources or multiple independent accounts support the core facts, as far as the editorial process can establish. It does not mean that every detail is correct.</p>
             <p>“Disputed” means the core facts are broadly supported but an interpretation, cause, or detail is contested. “Folklore” means the material comes from legend, oral tradition, or urban legend. “Hoax” means the subject is a known or strongly evidenced fabrication. These labels are not verdicts about the people who tell the story.</p>
-            <p>If you believe a label is wrong, report it with sources through the correction issue template. The label should change when the evidence changes.</p>
+            <p>If you believe a label is wrong, report it with sources in the public issue tracker. The label should change when the evidence changes.</p>
           `,
         },
         {
@@ -230,7 +230,7 @@ export function legalContent(lang: InfoLang): InfoContent {
             <p><strong>Browser storage.</strong> The site stores two preferences in your browser's local storage: <code>xiqiqi-theme</code> (light or dark) and <code>xiqiqi-lang</code> (Chinese or English). They stay on your device, are not sent to us, and can be removed by clearing site data in your browser.</p>
             <p><strong>Offline cache.</strong> A service worker may cache pages and images in your browser so the site can load with a weak connection. The cache is local and can be cleared through your browser settings.</p>
             <p><strong>Hosting.</strong> The site is served by GitHub Pages. GitHub may process technical data such as IP address, request time, user agent, and referring page for security, delivery, and operational purposes under the ${ext(githubPrivacyUrl, 'GitHub Privacy Statement')}. XIQIQI does not build visitor profiles from that data.</p>
-            <p><strong>Issues and voluntary contact.</strong> If you open an issue in the content repository, GitHub will process your account and issue data, and the issue is public. Please do not include sensitive personal information. We use the issue only to review and respond to the report.</p>
+            <p><strong>Issues and voluntary contact.</strong> Browsing the public issue tracker does not require a GitHub account. If you open or reply to an issue, GitHub will process your account and issue data, and the issue is public. Please do not include sensitive personal information. We use the issue only to review and respond to the report.</p>
             <p><strong>External links.</strong> Links to sources, ${ext(netcnUrl, 'netcn.org')}, and GitHub take you to services with their own privacy policies. Their practices are not covered by this page.</p>
             <p><strong>Children.</strong> The site is not directed to children and does not knowingly collect children's personal information. If you believe a child's information has been posted in an issue, report it so it can be removed.</p>
             <p><strong>International processing.</strong> GitHub may process data in countries other than yours. If you do not want that, please do not submit an issue.</p>
@@ -266,7 +266,7 @@ export function legalContent(lang: InfoLang): InfoContent {
           id: 'corrections',
           title: 'Corrections, removal and complaints',
           html: `
-            <p>Corrections and rights complaints go through the <a href="${issuesUrl}" target="_blank" rel="noopener">correction issue template</a>. Please include the URL, the exact passage or image, the problem, and supporting sources or rights information.</p>
+            <p>Corrections and rights complaints go through the <a href="${issuesUrl}" target="_blank" rel="noopener">public issue tracker</a>. Please include the URL, the exact passage or image, the problem, and supporting sources or rights information.</p>
             <p>There is no fixed two-week window and no promise of a particular response time. Reports are reviewed as soon as they can be verified. Where a rights claim is credible, the material may be removed while the claim is checked; where a factual correction is verified, the entry and ledger are updated.</p>
             <p>Abusive, vexatious, or doxxing reports may be closed without action. Public issues should not contain private personal data.</p>
           `,
@@ -283,7 +283,7 @@ export function legalContent(lang: InfoLang): InfoContent {
           id: 'contact',
           title: 'Contact',
           html: `
-            <p>The public issue tracker is the contact route for corrections, privacy questions, and rights requests: ${ext(issuesUrl, 'open an issue')}.</p>
+            <p>The public issue tracker is the contact route for corrections, privacy questions, and rights requests: ${ext(issuesUrl, 'browse the issue tracker')}.</p>
             <p>For the archive's editorial approach, see the <a href="/en/about/">about page</a>.</p>
           `,
         },
@@ -325,7 +325,7 @@ export function legalContent(lang: InfoLang): InfoContent {
         html: `
           <p>“已核实”表示按照编辑流程能够确认，核心事实有可靠来源或多方独立记载支持；不代表每个细节都正确。</p>
           <p>“争议”表示核心事实大体成立，但某种解释、成因或细节仍有争论。“传说”表示材料来自传说、口述传统或都市传说。“骗局”表示该题材是已知或证据较强的伪造。标签不是对讲述者的判决。</p>
-          <p>如果你认为标签不准确，请附来源通过更正 Issue 报告。证据变化时，标签应当随之改变。</p>
+          <p>如果你认为标签不准确，请附来源通过公开 Issue 报告。证据变化时，标签应当随之改变。</p>
         `,
       },
       {
@@ -336,7 +336,7 @@ export function legalContent(lang: InfoLang): InfoContent {
           <p><strong>浏览器本地存储。</strong>本站只在浏览器 local storage 中保存两个偏好：<code>xiqiqi-theme</code>（明暗主题）和 <code>xiqiqi-lang</code>（中英文）。它们留在你的设备上，不会传给我们；清除浏览器站点数据即可删除。</p>
           <p><strong>离线缓存。</strong>Service Worker 可能把页面与图片缓存到你的浏览器，以便弱网时打开。缓存只存在本地，可通过浏览器设置清除。</p>
           <p><strong>托管服务。</strong>本站由 GitHub Pages 托管。GitHub 可能出于安全、分发与运维目的，按 ${ext(githubPrivacyUrl, 'GitHub 隐私声明')} 处理 IP 地址、请求时间、User-Agent、来源页面等技术数据。稀奇奇不据此建立访问者画像。</p>
-          <p><strong>Issue 与主动联系。</strong>如果你在内容仓提交 Issue，GitHub 会处理你的账号与 Issue 数据，且 Issue 是公开的。请勿提交敏感个人信息。我们只把它用于复核与回应报告。</p>
+          <p><strong>Issue 与主动联系。</strong>浏览公开 Issue 列表不需要 GitHub 账号；如果你新建或回复 Issue，GitHub 会处理你的账号与 Issue 数据，且 Issue 是公开的。请勿提交敏感个人信息。我们只把它用于复核与回应报告。</p>
           <p><strong>外部链接。</strong>来源、${ext(netcnUrl, 'netcn.org')} 与 GitHub 等链接会把你带到第三方服务，它们有自己的隐私政策，不在本页覆盖范围内。</p>
           <p><strong>儿童。</strong>本站不面向儿童，也不主动收集儿童个人信息。若你认为 Issue 中出现了儿童信息，请报告，我们会尽快删除。</p>
           <p><strong>跨境处理。</strong>GitHub 可能在你所在国家或地区以外处理数据。如果不希望这样，请不要提交 Issue。</p>
@@ -372,7 +372,7 @@ export function legalContent(lang: InfoLang): InfoContent {
         id: 'corrections',
         title: '更正、删除与投诉',
         html: `
-          <p>更正与权利投诉统一走 <a href="${issuesUrl}" target="_blank" rel="noopener">内容仓的更正 Issue 模板</a>。请附页面地址、具体段落或图片、问题说明，以及支持更正的来源或权利信息。</p>
+          <p>更正与权利投诉统一走 <a href="${issuesUrl}" target="_blank" rel="noopener">内容仓的公开 Issue</a>。请附页面地址、具体段落或图片、问题说明，以及支持更正的来源或权利信息。</p>
           <p>我们不设固定两周等待期，也不承诺特定响应时限。收到报告后会尽快复核；权利主张可信时，可能先移除材料再核查；事实更正核实后，会更新条目与来源台账。</p>
           <p>辱骂、骚扰、恶意重复或包含人肉信息的报告可能直接关闭。公开 Issue 中请勿包含私人个人数据。</p>
         `,
@@ -389,7 +389,7 @@ export function legalContent(lang: InfoLang): InfoContent {
         id: 'contact',
         title: '联系',
         html: `
-          <p>更正、隐私问题与权利请求的公开联系入口：${ext(issuesUrl, '提交 Issue')}。</p>
+          <p>更正、隐私问题与权利请求的公开联系入口：${ext(issuesUrl, '查看公开 Issue')}。</p>
           <p>关于本站的编辑方法，见 <a href="/about/">关于页面</a>。</p>
         `,
       },

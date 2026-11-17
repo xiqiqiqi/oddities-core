@@ -9,6 +9,8 @@ const { lang = 'zh' } = Astro.props;
 
 const site = getSiteInfo(lang);
 const channels = getChannels();
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/' || currentPath === '/en/';
 const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
 
 const labels = lang === 'zh'
@@ -22,7 +24,7 @@ const directoryTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org 
   <a
     class:list={['tab', site.mode === 'portal' && 'is-active']}
     href={portalHref}
-    aria-current={site.mode === 'portal' ? 'page' : undefined}
+    aria-current={site.mode === 'portal' && isHome ? 'page' : undefined}
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
       <circle cx="12" cy="12" r="8"></circle>
@@ -37,7 +39,7 @@ const directoryTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org 
     <a
       class:list={['tab', site.channel === channel.id && 'is-active']}
       href={getChannelHref(channel, lang)}
-      aria-current={site.channel === channel.id ? 'page' : undefined}
+      aria-current={site.channel === channel.id && isHome ? 'page' : undefined}
     >
       {channel.id === 'mystery' && (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">

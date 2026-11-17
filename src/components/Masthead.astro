@@ -20,9 +20,13 @@ const {
 } = Astro.props;
 
 const channels = getChannels();
-const channelMode = getSiteMode() === 'channel';
+const siteMode = getSiteMode();
 const currentChannel = getSiteChannel();
-const portalHref = lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/';
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/' || currentPath === '/en/';
+const portalHref = siteMode === 'portal'
+  ? (lang === 'en' ? '/en/' : '/')
+  : (lang === 'en' ? 'https://xiqiqi.com/en/' : 'https://xiqiqi.com/');
 const portalLabel = lang === 'zh' ? '无奇不有' : 'XIQIQI';
 const randomLabel = lang === 'zh' ? '随机一条' : 'Random';
 const searchLabel = lang === 'zh' ? '搜索档案' : 'Search';
@@ -44,9 +48,9 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
     </a>
 
     <nav class="main-nav" aria-label={lang === 'zh' ? '频道导航' : 'Channel navigation'}>
-      {channelMode && <a class="main-nav-home" href={portalHref}>{portalLabel}</a>}
+      <a class="main-nav-home" href={portalHref} aria-current={siteMode === 'portal' && isHome ? 'page' : undefined}>{portalLabel}</a>
       {channels.map((channel) => (
-        <a class:list={[currentChannel === channel.id && 'is-current']} href={getChannelHref(channel, lang)}>
+        <a class:list={[currentChannel === channel.id && 'is-current']} href={getChannelHref(channel, lang)} aria-current={currentChannel === channel.id && isHome ? 'page' : undefined}>
           {lang === 'zh' ? channel.zh : channel.en}
         </a>
       ))}
@@ -142,6 +146,7 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   .main-nav a {
     color: var(--ink-2);
     font-size: 13px;
+    white-space: nowrap;
     transition: color 160ms ease;
   }
 
@@ -222,6 +227,16 @@ const netcnTitle = lang === 'zh' ? 'netcn.org · 简洁导航' : 'netcn.org · S
   @media (max-width: 1050px) {
     .main-nav {
       gap: 14px;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .main-nav {
+      gap: 8px;
+    }
+
+    .main-nav a {
+      font-size: 12px;
     }
   }
 

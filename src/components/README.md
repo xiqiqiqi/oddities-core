@@ -13,7 +13,7 @@
 | `ThemeToggle.astro` | 明暗切换 | 默认暗色，切换亮色，记住选择 |
 | `LangToggle.astro` | 中英切换 | EN / 中，记住选择 |
 | `Rhino.astro` | 犀牛图标 | 页头、空状态、随机入口 |
-| `Footer.astro` | 页脚 | 单行：站名与 xiqiqi.com、报告问题、法律与隐私、netcn 导航 |
+| `Footer.astro` | 页脚 | 单行：xiqiqi.com、年份、CC BY-SA 4.0、报告问题、法律与隐私 |
 | `InfoPage.astro` | 关于 / 法律页 | 标题区、粘性目录、分节正文 |
 
 ## 组件约定
@@ -21,5 +21,5 @@
 - 所有站点共用 `oddities-core` 的同一套组件，站点仓不复制页面代码。
 - 每个组件只依赖 `tokens.css` 的变量，不写死颜色。
 - 中英文文案必须由 `lang` 或 `src/i18n/*.yml` 驱动，不在英文页面留下中文按钮、标签或无障碍文案。
-- 页脚保持单行，只保留站名与 xiqiqi.com、报告问题、法律与隐私和 netcn 导航；频道入口由页头和移动底栏承担。
+- 页脚保持单行，只保留 xiqiqi.com、年份、CC BY-SA 4.0、报告问题和法律与隐私；频道与 netcn 入口由页头和移动底栏承担。
 - 法律与隐私文案集中在 `src/lib/info.ts`，页面只负责路由与语言。
