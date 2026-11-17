@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { sources = [], title = '来源台账', lang = 'zh' } = Astro.props;
+const text = (zh: string, en?: string) => (lang === 'en' && en ? en : zh);
 const labels = lang === 'zh'
   ? { pub: '作者 / 机构', use: '用途', lic: '许可', count: (n: number) => `共 ${n} 条 · 逐条列出` }
   : { pub: 'Author / Institution', use: 'Use', lic: 'License', count: (n: number) => `${n} sources · listed in full` };
@@ -19,27 +20,32 @@ const labels = lang === 'zh'
     <p class="ledger-count">{labels.count(sources.length)}</p>
   </div>
   <div class="ledger-grid">
-    {sources.map((source) => (
+    {sources.map((source) => {
+      const usage = lang === 'en' ? source.usage_en : source.usage;
+      return (
       <article class="ledger-item">
         <div class="ledger-top">
           <span class="ledger-id">{source.id}</span>
-          <span class="ledger-year">{source.year}</span>
+          <span class="ledger-year">{text(source.year, source.year_en)}</span>
         </div>
-        <a class="ledger-title" href={source.url} target="_blank" rel="noopener">{source.title}</a>
+        <a class="ledger-title" href={source.url} target="_blank" rel="noopener">{text(source.title, source.title_en)}</a>
         <p class="ledger-field">
           <span class="ledger-label">{labels.pub}</span>
-          {source.publisher}
+          {text(source.publisher, source.publisher_en)}
         </p>
-        <p class="ledger-field">
-          <span class="ledger-label">{labels.use}</span>
-          {source.usage}
-        </p>
+        {usage ? (
+          <p class="ledger-field">
+            <span class="ledger-label">{labels.use}</span>
+            {usage}
+          </p>
+        ) : null}
         <p class="ledger-lic">
           <span class="ledger-label">{labels.lic}</span>
-          <span class="ledger-chip">{source.license}</span>
+          <span class="ledger-chip">{text(source.license, source.license_en)}</span>
         </p>
       </article>
-    ))}
+      );
+    })}
   </div>
 </section>
 

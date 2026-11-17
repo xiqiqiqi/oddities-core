@@ -9,11 +9,16 @@ export type Lang = 'zh' | 'en';
 export interface SourceItem {
   id: string;
   title: string;
+  title_en?: string;
   publisher: string;
+  publisher_en?: string;
   url: string;
   year: string;
+  year_en?: string;
   license: string;
+  license_en?: string;
   usage: string;
+  usage_en?: string;
 }
 
 export interface ChannelMeta {
